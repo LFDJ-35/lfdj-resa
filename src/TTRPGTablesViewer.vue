@@ -55,6 +55,7 @@ h2 {
 #placeholder-ttrpg-table {
   display: flex;
   flex-direction: column;
+  max-width: 20em;
   padding: 1em;
   border-radius: var(--md-sys-shape-corner-medium);
   justify-content: center;
