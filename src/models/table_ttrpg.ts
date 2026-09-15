@@ -11,13 +11,14 @@ class TTRPGTableModel extends LFDJEvent {
 
   constructor(
     title: string,
-    date: Date,
+    from_date: Date,
+    to_date: Date,
     description: string,
     place: Place,
     author: Member,
     max_players: number,
   ) {
-    super(title, date, description, place)
+    super(title, from_date, to_date, description, place)
     this.author = author
     this.max_players = max_players
     this.players = Array.from({ length: max_players })

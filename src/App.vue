@@ -29,9 +29,24 @@ import TTRPGTablesViewer from './TTRPGTablesViewer.vue';
 :root {
   --md-ref-typeface-brand: 'Open Sans';
   --md-ref-typeface-plain: system-ui;
+  --md-sys-shape-corner-none: 0px;
+  --md-sys-shape-corner-extra-small: 4px;
+  --md-sys-shape-corner-small: 8px;
+  --md-sys-shape-corner-medium: 12px;
+  /* Cartes classiques */
+  --md-sys-shape-corner-large: 16px;
+  /* Dialogues, tiroirs */
+  --md-sys-shape-corner-extra-large: 28px;
+  /* Grands conteneurs M3 */
+  --md-sys-shape-corner-full: 9999px;
+  /* Boutons, Badges, Chips */
 }
 
 md-icon {
   font-family: "Material Symbols Outlined";
+}
+
+.clickable:hover {
+  cursor: pointer;
 }
 </style>

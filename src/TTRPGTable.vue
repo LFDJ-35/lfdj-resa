@@ -1,13 +1,18 @@
 <script setup lang="ts">
 
-import { MdOutlinedTextField } from "@material/web/all";
+import "@material/web/chips/assist-chip";
 import "@material/web/dialog/dialog";
+import "@material/web/icon/icon";
+import "@material/web/list/list";
+import "@material/web/list/list-item";
+
+import { MdOutlinedTextField } from "@material/web/all";
 import { MdDialog } from "@material/web/dialog/dialog";
 import { ref, type PropType } from "vue";
 import { AVAILABLE_MEMBER_SENTINEL } from "./data/members";
+import { format_date_hour } from "./formatters/date";
 import { Member } from "./models/member";
 import { TTRPGTableModel } from "./models/table_ttrpg";
-
 
 const props = defineProps({
   table_data: { type: Object as PropType<TTRPGTableModel>, required: true }
@@ -70,32 +75,51 @@ function remove_player(member: Member): boolean {
 </script>
 
 <template>
-  <h3>{{ table.title }}</h3>
+  <section class="table-view">
+    <h3>{{ table.title }}</h3>
 
-  <p> Maître du jeu : {{ table.author.pseudo }} [{{ table.author.name }}]</p>
-  <p> Nombre de joueurs : {{ table.player_number }} / {{ table.max_players }}</p>
-  <p> Description : {{ table.description }}</p>
+    <md-chip-set>
+      <md-assist-chip aria-label="Maître du Jeu" title="Maître du Jeu">
+        <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
+        <md-icon slot="icon">person</md-icon>
+        {{ table.author.pseudo }} [{{ table.author.name }}]
+      </md-assist-chip>
+      <md-assist-chip aria-label="Nombre de Joueurs à la table" title="Nombre de Joueurs à la table">
+        <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
+        <md-icon slot="icon">group</md-icon>
+        <span>{{ table.player_number }}/{{ table.max_players }}</span>
+      </md-assist-chip>
+      <md-assist-chip aria-label="Heures de début et de fin" title="Heures de début et de fin">
+        <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
+        <md-icon slot="icon">nest_clock_farsight_analog</md-icon>
+        <span>{{ format_date_hour(table.from_date) }}-{{ format_date_hour(table.to_date) }}</span>
+      </md-assist-chip>
+    </md-chip-set>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Joueurs</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="member in table.players" :key="member.id">
-        <template v-if="member.id === AVAILABLE_MEMBER_SENTINEL.id">
-          <td>Disponible</td>
-          <td @click="open_dialog">S'inscrire</td>
+    <p>{{ table.description }}</p>
+
+    <md-list class="player-list">
+      <template v-for="member in table.players" :key="member.id">
+        <template v-if="member.id !== AVAILABLE_MEMBER_SENTINEL.id">
+          <md-list-item>
+            <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
+            <div slot="headline"> {{ member.pseudo }} [{{ member.name }}]</div>
+            <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
+            <md-icon class="clickable" slot="end" @click="() => remove_player(member)">person_remove</md-icon>
+          </md-list-item>
         </template>
         <template v-else>
-          <td>{{ member.pseudo }} [{{ member.name }}]</td>
-          <td @click="() => remove_player(member)">Se désinscrire</td>
+          <md-list-item @click="open_dialog" class="clickable" title="Cliquez pour inscrire un joueur"
+            aria-label="Inscrire un joueur">
+            <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
+            <div slot="headline"> Disponible </div>
+            <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
+            <md-icon slot="end">person_add</md-icon>
+          </md-list-item>
         </template>
-      </tr>
-    </tbody>
-  </table>
+      </template>
+    </md-list>
+  </section>
 
   <!--
   TODO : retravailler l'accessibilité
@@ -125,8 +149,31 @@ function remove_player(member: Member): boolean {
 </template>
 
 <style scoped>
+.table-view {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: var(--md-sys-shape-corner-medium);
+  padding: 1em;
+  /* https://getcssscan.com/css-box-shadow-examples */
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+}
+
+.dialog-headline {
+  font-size: x-large;
+}
+
+
 md-dialog>form {
   display: grid;
   row-gap: 1em;
+}
+
+.table-view {
+  max-width: 20em;
+}
+
+@media (max-width: 800px) {
+  .dialog-headline {
+    font-size: larger;
+  }
 }
 </style>

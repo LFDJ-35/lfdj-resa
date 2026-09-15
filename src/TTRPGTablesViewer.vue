@@ -33,10 +33,28 @@ function switch_active_session(event: Event) {
   </md-tabs>
 
   <h2> Tables de jeu de rôle du {{ format_date_day(current_session?.from_date) }}</h2>
-
-  <section v-for="table in current_session?.tables" :key="table.title">
-    <TTRPGTable :table_data="table" />
-  </section>
+  <article class="ttrpg-tables-view">
+    <TTRPGTable v-for="table in current_session?.tables" :key="table.title" :table_data="table" />
+  </article>
 </template>
 
-<style scoped></style>
+<style scoped>
+h2 {
+  text-align: center;
+}
+
+.ttrpg-tables-view {
+  display: flex;
+  gap: 3em;
+}
+
+/* Affichage mobile */
+@media (max-width: 800px) {
+  .ttrpg-tables-view {
+    width: 75vw;
+    margin: auto;
+    display: grid;
+    grid-column: 1;
+  }
+}
+</style>
