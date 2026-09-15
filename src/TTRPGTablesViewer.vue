@@ -1,20 +1,34 @@
 <script setup lang="ts">
 
-import { VITRE } from './data/places';
-import { Member } from './models/member';
-import { TTRPGTableModel } from './models/table_ttrpg';
+import { MdPrimaryTab, MdTabs } from "@material/web/all";
+import "@material/web/tabs/tabs";
+import { ref } from 'vue';
+import { FAKE_SESSIONS } from './data/sessions.ts';
+import { format_date_day } from './formatters/date.ts';
 import TTRPGTable from './TTRPGTable.vue';
 
 // TODO : Réaliser une récupération des tables.
-const TABLES = [
-  new TTRPGTableModel("Jeu de rôle", new Date(), "description", VITRE, new Member("AAA", "BBB"), 4),
-  new TTRPGTableModel("Jeu de rôle", new Date(), "description", VITRE, new Member("AAA", "BBB"), 4)
-];
+
+const current_tab_index = ref(0);
+
+function switch_active_session(event: Event) {
+
+  if (event.target === undefined || event.target === null) {
+    return
+  };
+  current_tab_index.value = (event.target as MdTabs).activeTabIndex
+}
 
 </script>
 
 <template>
-  <section v-for="table in TABLES" :key="table.title">
+  <md-tabs @change="switch_active_session">
+    <md-primary-tab v-for="(session, index) in FAKE_SESSIONS" :key="session.from_date"
+      :class="{ 'active': index === 0 }">{{
+        format_date_day(session.from_date) }}
+    </md-primary-tab>
+  </md-tabs>
+  <section v-for="table in FAKE_SESSIONS[current_tab_index]?.tables" :key="table.title">
     <TTRPGTable :table_data="table" />
   </section>
 </template>
