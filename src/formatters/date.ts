@@ -1,4 +1,7 @@
-function format_date_day(date: Date): string {
+function format_date_day(date: Date | undefined | null): string {
+
+  if (date === undefined || date === null) { return "" }
+
   let day = `${date.getDate()}`;
   if (date.getDate() < 10) {
     day = `0${day}`;

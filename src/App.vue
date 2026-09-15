@@ -20,3 +20,18 @@ import TTRPGTablesViewer from './TTRPGTablesViewer.vue';
   right: 1em;
 }
 </style>
+
+<style>
+* {
+  font-family: "Open Sans";
+}
+
+:root {
+  --md-ref-typeface-brand: 'Open Sans';
+  --md-ref-typeface-plain: system-ui;
+}
+
+md-icon {
+  font-family: "Material Symbols Outlined";
+}
+</style>

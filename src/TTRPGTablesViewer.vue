@@ -10,6 +10,7 @@ import TTRPGTable from './TTRPGTable.vue';
 // TODO : Réaliser une récupération des tables.
 
 const current_tab_index = ref(0);
+const current_session = ref(FAKE_SESSIONS[current_tab_index.value])
 
 function switch_active_session(event: Event) {
 
@@ -17,18 +18,23 @@ function switch_active_session(event: Event) {
     return
   };
   current_tab_index.value = (event.target as MdTabs).activeTabIndex
+  current_session.value = FAKE_SESSIONS[current_tab_index.value]
 }
 
 </script>
 
 <template>
+
   <md-tabs @change="switch_active_session">
     <md-primary-tab v-for="(session, index) in FAKE_SESSIONS" :key="session.from_date"
       :class="{ 'active': index === 0 }">{{
         format_date_day(session.from_date) }}
     </md-primary-tab>
   </md-tabs>
-  <section v-for="table in FAKE_SESSIONS[current_tab_index]?.tables" :key="table.title">
+
+  <h2> Tables de jeu de rôle du {{ format_date_day(current_session?.from_date) }}</h2>
+
+  <section v-for="table in current_session?.tables" :key="table.title">
     <TTRPGTable :table_data="table" />
   </section>
 </template>
