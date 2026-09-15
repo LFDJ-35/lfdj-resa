@@ -32,7 +32,7 @@ function format_date_day(date: Date | undefined | null): string {
 }
 
 function format_date_hour(date: Date | undefined | null): string {
-  if (date === undefined || date === null) { return "" }
+  if (date === undefined || date === null) { return "--:--" }
 
   const hours = add_leading_zero(date.getHours());
   const minutes = add_leading_zero(date.getMinutes());
