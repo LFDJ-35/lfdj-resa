@@ -1,9 +1,8 @@
 import { Member } from './member'
-import { Place } from './place'
-import { LFDJEvent } from './event'
+import { SessionEvent } from './event'
 import { AVAILABLE_MEMBER_SENTINEL } from '@/data/members'
 
-class TTRPGTableModel extends LFDJEvent {
+class TTRPGTableModel extends SessionEvent {
   max_players: number
   author: Member
   players: Member[]
@@ -14,11 +13,10 @@ class TTRPGTableModel extends LFDJEvent {
     from_date: Date,
     to_date: Date,
     description: string,
-    place: Place,
     author: Member,
     max_players: number,
   ) {
-    super(title, from_date, to_date, description, place)
+    super(title, from_date, to_date, description)
     this.author = author
     this.max_players = max_players
     this.players = Array.from({ length: max_players })

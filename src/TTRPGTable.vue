@@ -14,6 +14,9 @@ import { format_date_hour } from "./formatters/date";
 import { Member } from "./models/member";
 import { TTRPGTableModel } from "./models/table_ttrpg";
 
+import { closeDialog, openDialog } from "./utils/dialogs";
+import { checkMdOutlinedTextFieldValidity, findRecursiveNamedItem } from "./utils/forms";
+
 const props = defineProps({
   table_data: { type: Object as PropType<TTRPGTableModel>, required: true }
 });
@@ -21,48 +24,27 @@ const props = defineProps({
 const table = ref(props.table_data);
 
 const dialogRef = ref<MdDialog | null>(null);
-const textFieldPseudoRef = ref<MdOutlinedTextField | null>(null);
-const textFieldNameRef = ref<MdOutlinedTextField | null>(null);
-
-
-function close_dialog() {
-  if (dialogRef.value === null) { return }
-  dialogRef.value.close();
-}
-
-function open_dialog() {
-  if (dialogRef.value === null) { return };
-  dialogRef.value.show();
-}
 
 function add_player(): boolean {
-
-  if (dialogRef.value === null || textFieldNameRef.value === null || textFieldPseudoRef.value === null) {
-    console.warn(`Références nulles`);
-    console.debug(`${dialogRef.value}`);
-    console.debug(`${textFieldNameRef.value}`);
-    console.debug(`${textFieldPseudoRef.value}`);
-
+  if (dialogRef.value === null) {
     return false;
   }
 
-  if (!textFieldNameRef.value.checkValidity()) {
-    console.error(`Nom [${textFieldNameRef.value.value}] invalide`);
+  const name = findRecursiveNamedItem(dialogRef.value, "name") as MdOutlinedTextField;
+  const pseudo = findRecursiveNamedItem(dialogRef.value, "pseudo") as MdOutlinedTextField;
+
+  let noValidationError = true;
+  noValidationError = checkMdOutlinedTextFieldValidity(name, "Le nom du joueur doit contenir au moins un caractère") && noValidationError;
+  noValidationError = checkMdOutlinedTextFieldValidity(pseudo, "Le pseudo du joueur doit contenir au moins un caractère") && noValidationError;
+
+  if (!noValidationError) {
     return false;
   }
 
-  if (!textFieldNameRef.value.checkValidity()) {
-    console.error(`Pseudo [${textFieldPseudoRef.value.value}] invalide`);
-    return false;
-  }
+  console.debug(`Le membre [${pseudo.value} | ${name.value}] est ajouté à la table.`);
+  table.value.add_player(new Member(pseudo.value, name.value));
 
-  const name = textFieldPseudoRef.value.value;
-  const pseudo = textFieldPseudoRef.value.value;
-
-  console.debug(`Le membre [${name} | ${pseudo}] est ajouté à la table.`);
-  table.value.add_player(new Member(pseudo, name));
-
-  close_dialog();
+  closeDialog(dialogRef.value);
 
   return true;
 }
@@ -109,7 +91,7 @@ function remove_player(member: Member): boolean {
           </md-list-item>
         </template>
         <template v-else>
-          <md-list-item @click="open_dialog" class="clickable" title="Cliquez pour inscrire un joueur"
+          <md-list-item @click="() => openDialog(dialogRef)" class="clickable" title="Cliquez pour inscrire un joueur"
             aria-label="Inscrire un joueur">
             <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
             <div slot="headline"> Disponible </div>
@@ -133,15 +115,15 @@ function remove_player(member: Member): boolean {
 
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
     <form slot="content" class="dialog-inscription" method="dialog">
-      <md-outlined-text-field required ref="textFieldPseudoRef" label="Pseudo Discord" pattern=".+"
+      <md-outlined-text-field required name="pseudo" label="Pseudo Discord" pattern=".+"
         placeholder="Pseudo du joueur"></md-outlined-text-field>
-      <md-outlined-text-field required ref="textFieldNameRef" label="Prénom" pattern=".+"
+      <md-outlined-text-field required name="name" label="Prénom" pattern=".+"
         placeholder="Prénom du joueur"></md-outlined-text-field>
     </form>
 
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
     <div slot="actions">
-      <md-text-button @click="close_dialog">Annuler</md-text-button>
+      <md-text-button @click="() => closeDialog(dialogRef)">Annuler</md-text-button>
       <md-text-button @click="add_player">Confirmer l'inscription</md-text-button>
     </div>
   </md-dialog>

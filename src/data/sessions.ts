@@ -19,16 +19,16 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 
 const FAKE_SESSIONS: LFDJSessionModel[] = [
   new LFDJSessionModel(DATE_1, VITRE, [
-    new TTRPGTableModel("Alien", BEGIN_DATE, END_DATE, LOREM, VITRE, FAKE_MEMBERS[0]!, 4),
-    new TTRPGTableModel("7ème Mer", BEGIN_DATE, END_DATE, LOREM, VITRE, FAKE_MEMBERS[1]!, 4)
+    new TTRPGTableModel("Alien", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, 4),
+    new TTRPGTableModel("7ème Mer", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[1]!, 4)
   ]),
   new LFDJSessionModel(DATE_2, BAIS, [
-    new TTRPGTableModel("Cyberpunk RED", BEGIN_DATE, END_DATE, LOREM, VITRE, FAKE_MEMBERS[0]!, 4),
-    new TTRPGTableModel("Cats ! La Mascarade", BEGIN_DATE, END_DATE, LOREM, VITRE, FAKE_MEMBERS[1]!, 4)
+    new TTRPGTableModel("Cyberpunk RED", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, 4),
+    new TTRPGTableModel("Cats ! La Mascarade", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[1]!, 4)
   ]),
   new LFDJSessionModel(DATE_2, BAIS, [
-    new TTRPGTableModel("Tout le monde est John", BEGIN_DATE, END_DATE, LOREM, VITRE, FAKE_MEMBERS[0]!, 4),
-    new TTRPGTableModel("Agone", BEGIN_DATE, END_DATE, LOREM, VITRE, FAKE_MEMBERS[1]!, 4)
+    new TTRPGTableModel("Tout le monde est John", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, 4),
+    new TTRPGTableModel("Agone", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[1]!, 4)
   ]),
 ]
 

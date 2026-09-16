@@ -1,8 +1,8 @@
 import { TTRPGTableModel } from "./table_ttrpg";
 import type { Place } from "./place";
-import { LFDJEvent } from "./event";
+import { SessionEvent } from "./event";
 
-class LFDJSessionModel extends LFDJEvent {
+class LFDJSessionModel extends SessionEvent {
 
   tables: TTRPGTableModel[] = [];
 
@@ -13,7 +13,7 @@ class LFDJSessionModel extends LFDJEvent {
     begin_date.setHours(14, 0);
     end_date.setHours(1, 0);
 
-    super("Session de jeu", begin_date, end_date, "Session de jeu de La Forge des Joueurs", place);
+    super("Session de jeu", begin_date, end_date, "Session de jeu de La Forge des Joueurs");
     this.tables = tables;
   }
 }
