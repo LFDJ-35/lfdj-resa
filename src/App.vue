@@ -1,16 +1,42 @@
 <script setup lang="ts">
 import "@material/web/fab/fab";
 import "@material/web/icon/icon";
-import TTRPGTablesViewer from './TTRPGTablesViewer.vue';
+import "@material/web/tabs/primary-tab";
+import "@material/web/tabs/tabs";
 
+import { ref } from "vue";
+
+import { MdTabs } from "@material/web/tabs/tabs";
+import TTRPGTablesViewer from './TTRPGTablesViewer.vue';
+import { FAKE_SESSIONS } from "./data/sessions.ts";
+import { format_date_day } from "./formatters/date.ts";
+import type { LFDJSessionModel } from "./models/session.ts";
+import { sessionStore } from "./stores/session.ts";
+
+
+const currentTabIndex = ref(0);
+
+function switch_active_session(event: Event) {
+
+  if (event.target === undefined || event.target === null) {
+    return
+  };
+
+  currentTabIndex.value = (event.target as MdTabs).activeTabIndex
+  sessionStore.current = FAKE_SESSIONS[currentTabIndex.value] as LFDJSessionModel;
+}
 </script>
 
 <template>
+
+  <md-tabs @change="switch_active_session">
+    <md-primary-tab v-for="(session, index) in FAKE_SESSIONS" :key="session.from_date"
+      :class="{ 'active': index === 0 }">{{
+        format_date_day(session.from_date) }}
+    </md-primary-tab>
+  </md-tabs>
   <TTRPGTablesViewer />
-  <md-fab aria-label="add" id="button-add">
-    <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-    <md-icon slot="icon">add</md-icon>
-  </md-fab>
+
 </template>
 
 <style scoped>

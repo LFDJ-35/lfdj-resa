@@ -7,7 +7,13 @@ class LFDJSessionModel extends LFDJEvent {
   tables: TTRPGTableModel[] = [];
 
   constructor(date: Date, place: Place, tables: TTRPGTableModel[]) {
-    super("Session de jeu", date, "Session de jeu de La Forge des Joueurs", place);
+
+    const begin_date = new Date(date.getTime());
+    const end_date = new Date(date.getTime());
+    begin_date.setHours(14, 0);
+    end_date.setHours(1, 0);
+
+    super("Session de jeu", begin_date, end_date, "Session de jeu de La Forge des Joueurs", place);
     this.tables = tables;
   }
 }
