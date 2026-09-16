@@ -1,0 +1,8 @@
+services:
+  app:
+    image: lfdj-resa:dev
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '5173:3000'
