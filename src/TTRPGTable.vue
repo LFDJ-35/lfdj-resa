@@ -23,15 +23,18 @@ const props = defineProps({
 
 const table = ref(props.table_data);
 
-const dialogRef = ref<MdDialog | null>(null);
+const memberToRemove = ref<Member | null>(null);
+
+const addPlayerDialogRef = ref<MdDialog | null>(null);
+const removePlayerDialogRef = ref<MdDialog | null>(null);
 
 function add_player(): boolean {
-  if (dialogRef.value === null) {
+  if (addPlayerDialogRef.value === null) {
     return false;
   }
 
-  const name = findRecursiveNamedItem(dialogRef.value, "name") as MdOutlinedTextField;
-  const pseudo = findRecursiveNamedItem(dialogRef.value, "pseudo") as MdOutlinedTextField;
+  const name = findRecursiveNamedItem(addPlayerDialogRef.value, "name") as MdOutlinedTextField;
+  const pseudo = findRecursiveNamedItem(addPlayerDialogRef.value, "pseudo") as MdOutlinedTextField;
 
   let noValidationError = true;
   noValidationError = checkMdOutlinedTextFieldValidity(name, "Le nom du joueur doit contenir au moins un caractère") && noValidationError;
@@ -44,14 +47,21 @@ function add_player(): boolean {
   console.debug(`Le membre [${pseudo.value} | ${name.value}] est ajouté à la table.`);
   table.value.add_player(new Member(pseudo.value, name.value));
 
-  closeDialog(dialogRef.value);
+  closeDialog(addPlayerDialogRef.value);
 
   return true;
 }
 
-function remove_player(member: Member): boolean {
-  console.debug(`Le membre ${member.pseudo} est retiré de la table.`);
+function removePlayer(member: Member | null): boolean {
+  if (member === null) { return false };
+
+  console.debug(`Le membre ${member.pseudo} est retiré de la table.`);;
   return table.value.remove_player(member);
+}
+
+function openRemovePlayerDialog(member: Member) {
+  memberToRemove.value = member;
+  openDialog(removePlayerDialogRef.value);
 }
 
 </script>
@@ -87,12 +97,12 @@ function remove_player(member: Member): boolean {
             <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
             <div slot="headline"> {{ member.pseudo }} [{{ member.name }}]</div>
             <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-            <md-icon class="clickable" slot="end" @click="() => remove_player(member)">person_remove</md-icon>
+            <md-icon class="clickable" slot="end" @click="() => openRemovePlayerDialog(member)">person_remove</md-icon>
           </md-list-item>
         </template>
         <template v-else>
-          <md-list-item @click="() => openDialog(dialogRef)" class="clickable" title="Cliquez pour inscrire un joueur"
-            aria-label="Inscrire un joueur">
+          <md-list-item @click="() => openDialog(addPlayerDialogRef)" class="clickable"
+            title="Cliquez pour inscrire un joueur" aria-label="Inscrire un joueur">
             <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
             <div slot="headline"> Disponible </div>
             <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
@@ -109,7 +119,7 @@ function remove_player(member: Member): boolean {
   - tooltips
   - ...
   -->
-  <md-dialog ref="dialogRef">
+  <md-dialog ref="addPlayerDialogRef" id="addPlayerDialogRef">
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
     <h2 slot="headline" class="dialog-headline">Inscription d'un joueur à la table [{{ table.title }}]</h2>
 
@@ -123,8 +133,21 @@ function remove_player(member: Member): boolean {
 
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
     <div slot="actions">
-      <md-text-button @click="() => closeDialog(dialogRef)">Annuler</md-text-button>
+      <md-text-button @click="() => closeDialog(addPlayerDialogRef)">Annuler</md-text-button>
       <md-text-button @click="add_player">Confirmer l'inscription</md-text-button>
+    </div>
+  </md-dialog>
+
+  <md-dialog id="removePlayerDialogRef" ref="removePlayerDialogRef">
+    <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
+    <form slot="content">Souhaitez-vous désinscrire <b>{{ memberToRemove?.pseudo }} [{{ memberToRemove?.name }}] </b> de
+      la
+      table <b>{{ table.title }} </b> ?</form>
+    <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
+    <div slot="actions">
+      <md-text-button @click="() => closeDialog(removePlayerDialogRef)">Annuler</md-text-button>
+      <md-text-button @click="() => { removePlayer(memberToRemove); closeDialog(removePlayerDialogRef) }">Confirmer la
+        suppression</md-text-button>
     </div>
   </md-dialog>
 
@@ -144,7 +167,7 @@ function remove_player(member: Member): boolean {
 }
 
 
-md-dialog>form {
+#addPlayerDialogRef>form {
   display: grid;
   row-gap: 1em;
 }
