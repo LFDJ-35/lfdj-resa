@@ -92,24 +92,21 @@ function openRemovePlayerDialog(member: Member) {
 
     <md-list class="player-list">
       <template v-for="member in table.players" :key="member.id">
-        <template v-if="member.id !== AVAILABLE_MEMBER_SENTINEL.id">
-          <md-list-item>
-            <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-            <div slot="headline"> {{ member.pseudo }} [{{ member.name }}]</div>
-            <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-            <md-icon class="clickable" slot="end" @click="() => openRemovePlayerDialog(member)">person_remove</md-icon>
-          </md-list-item>
-        </template>
-        <template v-else>
-          <md-list-item @click="() => openDialog(addPlayerDialogRef)" class="clickable"
-            title="Cliquez pour inscrire un joueur" aria-label="Inscrire un joueur">
-            <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-            <div slot="headline"> Disponible </div>
-            <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-            <md-icon slot="end">person_add</md-icon>
-          </md-list-item>
-        </template>
+        <md-list-item v-if="member.id !== AVAILABLE_MEMBER_SENTINEL.id">
+          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
+          <div slot="headline"> {{ member.pseudo }} [{{ member.name }}]</div>
+          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
+          <md-icon class="clickable" slot="end" @click="() => openRemovePlayerDialog(member)">person_remove</md-icon>
+        </md-list-item>
       </template>
+
+      <md-list-item v-if="table.canInsertPlayer()" @click="() => openDialog(addPlayerDialogRef)" class="clickable"
+        title="Cliquez pour inscrire un joueur" aria-label="Inscrire un joueur">
+        <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
+        <div slot="headline"> Disponible </div>
+        <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
+        <md-icon slot="end">person_add</md-icon>
+      </md-list-item>
     </md-list>
   </section>
 

@@ -52,6 +52,10 @@ class TTRPGTableModel extends SessionEvent {
     this.player_number--
     return true
   }
+
+  canInsertPlayer(): boolean {
+    return this.players.find((member, _idx, _arr) => member.id === AVAILABLE_MEMBER_SENTINEL.id) !== undefined
+  }
 }
 
 export { TTRPGTableModel }
