@@ -67,7 +67,7 @@ function openRemovePlayerDialog(member: Member) {
 </script>
 
 <template>
-  <section class="table-view">
+  <section class="table-view shadow">
     <h3>{{ table.title }}</h3>
 
     <md-chip-set>
@@ -158,8 +158,6 @@ function openRemovePlayerDialog(member: Member) {
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: var(--md-sys-shape-corner-medium);
   padding: 1em;
-  /* https://getcssscan.com/css-box-shadow-examples */
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
 }
 
 .dialog-headline {

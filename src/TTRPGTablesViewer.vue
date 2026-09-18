@@ -109,10 +109,6 @@ function add_table() {
 </template>
 
 <style scoped>
-h2 {
-  text-align: center;
-}
-
 .ttrpg-tables-view {
   display: flex;
   gap: 3em;

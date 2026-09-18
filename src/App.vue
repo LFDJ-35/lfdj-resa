@@ -17,14 +17,22 @@ import type { FilterChipModel } from "./models/filter_chip.ts";
 import type { LFDJSessionModel } from "./models/session.ts";
 import { filterStore } from "./stores/filters.ts";
 import { sessionStore } from "./stores/session.ts";
+import MembersSeeking from "./components/MembersSeeking.vue";
 
+// Membres en quête de jeu
+const FILTER_ID_REC = "rec";
+// Membres en quête de covoiturage
 const FILTER_ID_COV = "cov";
+// Tables de JDR
 const FILTER_ID_JDR = "jdr";
+// Tables de JCC
 const FILTER_ID_JCC = "jcc";
+// Tables de JDF
 const FILTER_ID_JDF = "jdf";
 
 
 const FILTER_CHIPS: FilterChipModel[] = [
+  { id: FILTER_ID_REC, label: "Activer la vue Membres en recherche de jeux", icon: "person_alert", text: "Membres en recherche de jeu" },
   { id: FILTER_ID_COV, label: "Activer la vue covoiturage", icon: "local_taxi", text: "Covoiturage" },
   { id: FILTER_ID_JDR, label: "Activer la vue Jeu de rôle", icon: "ifl", text: "Jeu de rôle" },
   { id: FILTER_ID_JCC, label: "Activer la vue Jeu de cartes à collectionner", icon: "playing_cards", text: "Jeu de cartes à collectionner" },
@@ -46,6 +54,8 @@ function switch_active_session(event: Event) {
 
 <template>
 
+  <h1>La Forge des Joueurs - Planificateur de tables</h1>
+
   <nav>
     <md-tabs @change="switch_active_session">
       <md-primary-tab v-for="(session, index) in FAKE_SESSIONS" :key="session.from_date"
@@ -54,8 +64,10 @@ function switch_active_session(event: Event) {
       </md-primary-tab>
     </md-tabs>
     <FilterChips id="filter-chips" :chips=FILTER_CHIPS></FilterChips>
+    <md-divider></md-divider>
   </nav>
 
+  <MembersSeeking v-if="!filterStore.hide.has(FILTER_ID_REC)" />
   <div v-if="!filterStore.hide.has(FILTER_ID_COV)">Placeholder covoiturage</div>
   <TTRPGTablesViewer v-if="!filterStore.hide.has(FILTER_ID_JDR)" />
   <div v-if="!filterStore.hide.has(FILTER_ID_JDF)">Placeholder JDF</div>
@@ -104,5 +116,15 @@ nav {
   display: grid;
   grid-column: 1;
   gap: 1em;
+}
+
+h1,
+h2 {
+  text-align: center;
+}
+
+.shadow {
+  /* https://getcssscan.com/css-box-shadow-examples */
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
 }
 </style>
