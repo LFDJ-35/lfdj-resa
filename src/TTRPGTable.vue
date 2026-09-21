@@ -75,7 +75,7 @@ function openRemovePlayerDialog(member: Member) {
       <md-assist-chip aria-label="Maître du Jeu" title="Maître du Jeu">
         <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
         <md-icon slot="icon">person</md-icon>
-        {{ table.author.pseudo }} [{{ table.author.name }}]
+        {{ table.author.toString() }}
       </md-assist-chip>
       <md-assist-chip aria-label="Nombre de Joueurs à la table" title="Nombre de Joueurs à la table">
         <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
@@ -95,7 +95,7 @@ function openRemovePlayerDialog(member: Member) {
       <template v-for="member in table.players" :key="member.id">
         <md-list-item v-if="member.id !== AVAILABLE_MEMBER_SENTINEL.id">
           <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-          <div slot="headline"> {{ member.pseudo }} [{{ member.name }}]</div>
+          <div slot="headline"> {{ member.toString() }} </div>
           <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
           <md-icon class="clickable" slot="end" @click="() => openRemovePlayerDialog(member)">person_remove</md-icon>
         </md-list-item>
@@ -138,7 +138,7 @@ function openRemovePlayerDialog(member: Member) {
 
   <md-dialog id="removePlayerDialogRef" ref="removePlayerDialogRef">
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-    <form slot="content">Souhaitez-vous désinscrire <b>{{ memberToRemove?.pseudo }} [{{ memberToRemove?.name }}] </b> de
+    <form slot="content">Souhaitez-vous désinscrire <b>{{ memberToRemove?.toString() }}</b> de
       la
       table <b>{{ table.title }} </b> ?</form>
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->

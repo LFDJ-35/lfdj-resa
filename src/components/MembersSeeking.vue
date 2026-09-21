@@ -86,7 +86,7 @@ function addMemberToSeekingMembers(): void {
 
   <section class="card-section">
     <div class="card shadow" v-for="member in MEMBERS_SEEKING" :key="member.member.id">
-      <p>{{ member.member.pseudo }} [{{ member.member.name }}]</p>
+      <p>{{ member.member.toString() }}</p>
       <md-chip-set>
         <md-assist-chip disabled v-for="game in member.seeking" :key="game" :label="game">
           <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->

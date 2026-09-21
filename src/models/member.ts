@@ -15,6 +15,10 @@ class Member {
     this.pseudo = pseudo;
     this.name = name;
   }
+
+  toString(): string {
+    return `${this.pseudo} [${this.name}]`
+  }
 }
 
 export { Member };
