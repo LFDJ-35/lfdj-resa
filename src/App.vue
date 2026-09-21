@@ -55,10 +55,7 @@ function switch_active_session(event: Event) {
 
 <template>
 
-  <header>
-    <h1>La Forge des Joueurs - Planificateur de tables</h1>
-    <AccountLogin />
-  </header>
+  <h1>La Forge des Joueurs - Planificateur de tables</h1>
 
   <nav>
     <md-tabs @change="switch_active_session">
@@ -77,6 +74,7 @@ function switch_active_session(event: Event) {
   <div v-if="!filterStore.hide.has(FILTER_ID_JDF)">Placeholder JDF</div>
   <div v-if="!filterStore.hide.has(FILTER_ID_JCC)">Placeholder JCC</div>
 
+  <AccountLogin />
 </template>
 
 

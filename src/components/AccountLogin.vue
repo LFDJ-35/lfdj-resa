@@ -49,10 +49,12 @@ function logOut() {
 </script>
 
 <template>
-  <md-icon-button @click="openLoginModal">
+  <md-fab @click="openLoginModal">
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-    <md-icon>account_circle</md-icon>
-  </md-icon-button>
+    <md-icon v-if="identity === null" slot="icon">login</md-icon>
+    <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
+    <md-icon v-else slot="icon">logout</md-icon>
+  </md-fab>
 
   <md-dialog ref="loginDialogRef">
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
@@ -87,4 +89,10 @@ function logOut() {
   </md-dialog>
 </template>
 
-<style scoped></style>
+<style scoped>
+md-fab {
+  position: fixed;
+  bottom: 1em;
+  right: 1em;
+}
+</style>
