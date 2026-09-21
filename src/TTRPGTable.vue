@@ -16,6 +16,7 @@ import { TTRPGTableModel } from "./models/table_ttrpg";
 
 import { closeDialog, openDialog } from "./utils/dialogs";
 import { FieldsValidator, findRecursiveNamedItem } from "./utils/forms";
+import { identity } from "./stores/identity";
 
 const props = defineProps({
   table_data: { type: Object as PropType<TTRPGTableModel>, required: true }
@@ -27,6 +28,13 @@ const memberToRemove = ref<Member | null>(null);
 
 const addPlayerDialogRef = ref<MdDialog | null>(null);
 const removePlayerDialogRef = ref<MdDialog | null>(null);
+
+function addPlayerWithIdentity() {
+  if (identity.value !== null) {
+    table.value.add_player(identity.value);
+    closeDialog(addPlayerDialogRef.value);
+  }
+}
 
 function addPlayer(): boolean {
   if (addPlayerDialogRef.value === null) {
@@ -117,7 +125,21 @@ function openRemovePlayerDialog(member: Member) {
   - tooltips
   - ...
   -->
-  <md-dialog ref="addPlayerDialogRef" id="addPlayerDialogRef">
+
+  <md-dialog v-if="identity !== null" ref="addPlayerDialogRef" id="addPlayerDialogRef">
+    <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
+    <h2 slot="headline" class="dialog-headline">S'inscrire à la table [{{ table.title }}] ?</h2>
+
+    <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
+    <p slot="content"> Vous vous inscrirez en tant que {{ identity.toString() }}</p>
+
+    <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
+    <div slot="actions">
+      <md-text-button @click="() => closeDialog(addPlayerDialogRef)">Annuler</md-text-button>
+      <md-text-button @click="addPlayerWithIdentity">Confirmer l'inscription</md-text-button>
+    </div>
+  </md-dialog>
+  <md-dialog v-else ref="addPlayerDialogRef" id="addPlayerDialogRef">
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
     <h2 slot="headline" class="dialog-headline">Inscription d'un joueur à la table [{{ table.title }}]</h2>
 
