@@ -9,6 +9,7 @@ import { sessionStore } from './stores/session.ts'
 import TTRPGTable from './TTRPGTable.vue'
 import { closeDialog, openDialog } from './utils/dialogs.ts'
 import { FieldsValidator, findRecursiveNamedItem } from './utils/forms.ts'
+import { identity } from './stores/identity.ts'
 
 const dialogRef = ref<MdDialog | null>(null)
 
@@ -26,22 +27,29 @@ function add_table() {
   const players = findRecursiveNamedItem(formContent, 'players') as MdOutlinedTextField
   const description = findRecursiveNamedItem(formContent, 'description') as MdOutlinedTextField
 
-  const noValidationError = new FieldsValidator()
+  const fieldsValidator = new FieldsValidator()
     .addValidator(title, 'Le titre de la table doit au moins contenir un caractère.')
-    .addValidator(pseudo, 'Le pseudonyme du MJ doit au moins contenir un caractère.')
-    .addValidator(name, 'Le prénom du MJ doit au moins contenir un caractère.')
     .addValidator(players, 'Le nombre de joueurs doit être supérieur à 0')
     .addValidator(description, 'La table doit contenir une description')
-    .validate()
 
-  if (noValidationError) {
-    const author = new Member(pseudo.value, name.value)
+  if (identity.value === null) {
+    fieldsValidator
+      .addValidator(pseudo, 'Le pseudonyme du MJ doit au moins contenir un caractère.')
+      .addValidator(name, 'Le prénom du MJ doit au moins contenir un caractère.')
+  }
+
+  if (fieldsValidator.validate()) {
+    let author = identity.value;
+    if (identity.value === null) {
+      author = new Member(pseudo.value, name.value);
+    }
+
     const table = new TTRPGTableModel(
       title.value,
       sessionStore.current.from_date,
       sessionStore.current.to_date,
       description.value,
-      author,
+      author!,
       players.valueAsNumber,
     )
 
@@ -69,9 +77,10 @@ function add_table() {
 
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
     <form name="content" slot="content" class="dialog-inscription" method="dialog">
+      <p v-if="identity !== null">Ajouter une table en tant que {{ identity.toString() }}</p>
       <md-outlined-text-field required label="Titre de la table" name="title" pattern=".+"
         placeholder="Titre de la table"></md-outlined-text-field>
-      <span name="identity">
+      <span name="identity" v-if="identity === null">
         <md-outlined-text-field required name="pseudo" label="Pseudo Discord du MJ" pattern=".+"
           placeholder="Pseudo Discord du MJ"></md-outlined-text-field>
         <md-outlined-text-field required name="prenom" label="Prénom du MJ" pattern=".+"

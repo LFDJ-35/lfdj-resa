@@ -9,6 +9,7 @@ import { findRecursiveNamedItem } from '@/utils/forms'
 import { MdChipSet, MdDialog, MdFilterChip, MdOutlinedTextField } from '@material/web/all'
 import { ref } from 'vue'
 import { FieldsValidator } from '@/utils/forms'
+import { identity } from '@/stores/identity'
 
 type GameType = 'JDF' | 'JCC' | 'JDP' | 'JDR'
 
@@ -43,18 +44,27 @@ function addMemberToSeekingMembers(): void {
     return;
   }
 
-  // Récupération du nom et pseudo
-  const pseudo = findRecursiveNamedItem(addMemberSeekingDialogRef.value, "pseudo") as MdOutlinedTextField;
-  const prenom = findRecursiveNamedItem(addMemberSeekingDialogRef.value, "prenom") as MdOutlinedTextField;
+  // Par défaut, utilisation de l'identité de l'utilisateur connecté
+  let member = identity.value
+
+  // Sinon, validation des champs.
+  if (identity.value === null) {
+
+    // Récupération du nom et pseudo
+    const pseudo = findRecursiveNamedItem(addMemberSeekingDialogRef.value, "pseudo") as MdOutlinedTextField;
+    const prenom = findRecursiveNamedItem(addMemberSeekingDialogRef.value, "prenom") as MdOutlinedTextField;
+    const noValidationError = new FieldsValidator()
+      .addValidator(pseudo, 'Le pseudo discord doit comporter au moins un caractère')
+      .addValidator(prenom, 'Le prénom doit comporter au moins un caractère')
+      .validate()
+
+    if (noValidationError) {
+      member = new Member(pseudo.value, prenom.value);
+    }
+  }
 
   // Récupération des valeurs de chips
   const chips = (findRecursiveNamedItem(addMemberSeekingDialogRef.value, "jeux") as MdChipSet).chips as MdFilterChip[];
-
-  const noValidationError = new FieldsValidator()
-    .addValidator(pseudo, 'Le pseudo discord doit comporter au moins un caractère')
-    .addValidator(prenom, 'Le prénom doit comporter au moins un caractère')
-    .validate()
-
   const seeking = new Set<GameType>();
 
   for (const chip of chips) {
@@ -64,12 +74,12 @@ function addMemberToSeekingMembers(): void {
     }
   }
 
-  if (seeking.size === 0 || !noValidationError) {
+  if (seeking.size === 0 || member === null) {
     return;
   }
 
   const seekingMember: IMemberSeeking = {
-    member: new Member(pseudo.value, prenom.value),
+    member: member,
     seeking: seeking
   }
 
@@ -107,8 +117,11 @@ function addMemberToSeekingMembers(): void {
 
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
     <form name="content" slot="content" class="dialog-inscription" method="dialog">
-      <p>Qui êtes-vous ?</p>
-      <span name="identity">
+
+      <p v-if="identity === null">Qui êtes-vous ?</p>
+      <p v-else> Inscription en tant que {{ identity.toString() }}</p>
+
+      <span v-if="identity === null" name="identity">
         <md-outlined-text-field required name="pseudo" label="Pseudo Discord" pattern=".+"
           placeholder="Pseudo Discord"></md-outlined-text-field>
         <md-outlined-text-field required name="prenom" label="Prénom" pattern=".+"

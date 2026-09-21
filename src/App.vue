@@ -18,6 +18,7 @@ import type { LFDJSessionModel } from "./models/session.ts";
 import { filterStore } from "./stores/filters.ts";
 import { sessionStore } from "./stores/session.ts";
 import MembersSeeking from "./components/MembersSeeking.vue";
+import AccountLogin from "./components/AccountLogin.vue";
 
 // Membres en quête de jeu
 const FILTER_ID_REC = "rec";
@@ -54,7 +55,10 @@ function switch_active_session(event: Event) {
 
 <template>
 
-  <h1>La Forge des Joueurs - Planificateur de tables</h1>
+  <header>
+    <h1>La Forge des Joueurs - Planificateur de tables</h1>
+    <AccountLogin />
+  </header>
 
   <nav>
     <md-tabs @change="switch_active_session">
@@ -97,7 +101,8 @@ function switch_active_session(event: Event) {
   /* Boutons, Badges, Chips */
 }
 
-md-icon {
+md-icon,
+md-icon-button {
   font-family: "Material Symbols Outlined";
 }
 
@@ -115,7 +120,8 @@ md-icon {
   padding: 1em;
 }
 
-.add-element-box:hover {
+.add-element-box:hover,
+.clickable:hover {
   cursor: pointer;
 }
 
