@@ -75,13 +75,6 @@ function switch_active_session(event: Event) {
 
 </template>
 
-<style scoped>
-#button-add {
-  position: fixed;
-  bottom: 1em;
-  right: 1em;
-}
-</style>
 
 <style>
 * {
@@ -108,8 +101,37 @@ md-icon {
   font-family: "Material Symbols Outlined";
 }
 
-.clickable:hover {
+.add-element-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+
+  border: 1px rgba(0, 0, 0, 0.2) dashed !important;
+  border-radius: var(--md-sys-shape-corner-medium);
+
+  max-width: 15em;
+  padding: 1em;
+}
+
+.add-element-box:hover {
   cursor: pointer;
+}
+
+.card {
+  border-radius: var(--md-sys-shape-corner-small);
+  border: 1px rgba(0, 0, 0, 0.2) solid;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+  padding: 1em;
+  max-width: 20em;
+}
+
+/* Une section qui contient des .card */
+.card-section {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
 }
 
 nav {
@@ -126,5 +148,22 @@ h2 {
 .shadow {
   /* https://getcssscan.com/css-box-shadow-examples */
   box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+}
+
+
+/* Sur un affichage mobile*/
+@media (max-width: 800px) {
+
+  .add-element-box {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+
+  .card-section {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    justify-content: start;
+  }
 }
 </style>

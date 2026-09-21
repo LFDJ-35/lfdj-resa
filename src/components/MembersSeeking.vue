@@ -86,8 +86,8 @@ function addMemberToSeekingMembers(): void {
 <template>
   <h2>Membres en quête de jeux !</h2>
 
-  <section>
-    <div class="card-member-seeking-table shadow" v-for="member in MEMBERS_SEEKING" :key="member.member.id">
+  <section class="card-section">
+    <div class="card shadow" v-for="member in MEMBERS_SEEKING" :key="member.member.id">
       <p>{{ member.member.pseudo }} [{{ member.member.name }}]</p>
       <md-chip-set>
         <md-assist-chip disabled v-for="game in member.seeking" :key="game" :label="game">
@@ -96,8 +96,7 @@ function addMemberToSeekingMembers(): void {
         </md-assist-chip>
       </md-chip-set>
     </div>
-    <div class="card-member-seeking-table" id="card-add-member-seeking-table"
-      :aria-label="LABEL_ADD_MEMBER_SEEKING_TABLE" :title="LABEL_ADD_MEMBER_SEEKING_TABLE"
+    <div class="add-element-box" :aria-label="LABEL_ADD_MEMBER_SEEKING_TABLE" :title="LABEL_ADD_MEMBER_SEEKING_TABLE"
       @click="() => openDialog(addMemberSeekingDialogRef)">
       <md-icon>add</md-icon>
       <p>Je cherche une table !</p>
@@ -135,58 +134,4 @@ function addMemberToSeekingMembers(): void {
 
 </template>
 
-<style scoped>
-section {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 1em;
-}
-
-.card-member-seeking-table {
-  max-width: 15em;
-  border-radius: var(--md-sys-shape-corner-small);
-  border: 1px rgba(0, 0, 0, 0.2) solid;
-  padding: 1em;
-}
-
-#card-add-member-seeking-table {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 1em;
-  padding: 1em;
-  border-radius: var(--md-sys-shape-corner-medium);
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  border: 1px rgba(0, 0, 0, 0.2) dashed;
-}
-
-#card-add-member-seeking-table:hover {
-  cursor: pointer;
-}
-
-@media (max-width: 800px) {
-
-  section {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    align-items: center;
-    align-content: center;
-  }
-
-  .card-member-seeking-table {
-    width: 75%;
-    height: 75%;
-    margin: auto;
-  }
-
-  #card-add-member-seeking-table {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-  }
-
-}
-</style>
+<style scoped></style>
