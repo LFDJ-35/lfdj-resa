@@ -15,7 +15,7 @@ import { Member } from "./models/member";
 import { TTRPGTableModel } from "./models/table_ttrpg";
 
 import { closeDialog, openDialog } from "./utils/dialogs";
-import { checkMdOutlinedTextFieldValidity, findRecursiveNamedItem } from "./utils/forms";
+import { FieldsValidator, findRecursiveNamedItem } from "./utils/forms";
 
 const props = defineProps({
   table_data: { type: Object as PropType<TTRPGTableModel>, required: true }
@@ -28,7 +28,7 @@ const memberToRemove = ref<Member | null>(null);
 const addPlayerDialogRef = ref<MdDialog | null>(null);
 const removePlayerDialogRef = ref<MdDialog | null>(null);
 
-function add_player(): boolean {
+function addPlayer(): boolean {
   if (addPlayerDialogRef.value === null) {
     return false;
   }
@@ -36,9 +36,10 @@ function add_player(): boolean {
   const name = findRecursiveNamedItem(addPlayerDialogRef.value, "name") as MdOutlinedTextField;
   const pseudo = findRecursiveNamedItem(addPlayerDialogRef.value, "pseudo") as MdOutlinedTextField;
 
-  let noValidationError = true;
-  noValidationError = checkMdOutlinedTextFieldValidity(name, "Le nom du joueur doit contenir au moins un caractère") && noValidationError;
-  noValidationError = checkMdOutlinedTextFieldValidity(pseudo, "Le pseudo du joueur doit contenir au moins un caractère") && noValidationError;
+  const noValidationError = new FieldsValidator()
+    .addValidator(name, "Le nom du joueur doit contenir au moins un caractère")
+    .addValidator(pseudo, "Le pseudo du joueur doit contenir au moins un caractère")
+    .validate()
 
   if (!noValidationError) {
     return false;
@@ -131,7 +132,7 @@ function openRemovePlayerDialog(member: Member) {
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
     <div slot="actions">
       <md-text-button @click="() => closeDialog(addPlayerDialogRef)">Annuler</md-text-button>
-      <md-text-button @click="add_player">Confirmer l'inscription</md-text-button>
+      <md-text-button @click="addPlayer">Confirmer l'inscription</md-text-button>
     </div>
   </md-dialog>
 

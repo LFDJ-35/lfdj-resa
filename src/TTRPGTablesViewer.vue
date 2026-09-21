@@ -8,7 +8,7 @@ import { TTRPGTableModel } from './models/table_ttrpg.ts'
 import { sessionStore } from './stores/session.ts'
 import TTRPGTable from './TTRPGTable.vue'
 import { closeDialog, openDialog } from './utils/dialogs.ts'
-import { checkMdOutlinedTextFieldValidity, findRecursiveNamedItem } from './utils/forms.ts'
+import { FieldsValidator, findRecursiveNamedItem } from './utils/forms.ts'
 
 const dialogRef = ref<MdDialog | null>(null)
 
@@ -26,30 +26,13 @@ function add_table() {
   const players = findRecursiveNamedItem(formContent, 'players') as MdOutlinedTextField
   const description = findRecursiveNamedItem(formContent, 'description') as MdOutlinedTextField
 
-  // La validation est horrible, voir comment refactoriser tout cela.
-
-  let noValidationError = true
-  noValidationError =
-    checkMdOutlinedTextFieldValidity(
-      title,
-      'Le titre de la table doit au moins contenir un caractère.',
-    ) && noValidationError
-  noValidationError =
-    checkMdOutlinedTextFieldValidity(
-      pseudo,
-      'Le pseudonyme du MJ doit au moins contenir un caractère.',
-    ) && noValidationError
-  noValidationError =
-    checkMdOutlinedTextFieldValidity(
-      name,
-      'Le prénom du MJ doit au moins contenir un caractère.',
-    ) && noValidationError
-  noValidationError =
-    checkMdOutlinedTextFieldValidity(players, 'Le nombre de joueurs doit être supérieur à 0') &&
-    noValidationError
-  noValidationError =
-    checkMdOutlinedTextFieldValidity(description, 'La table doit contenir une description') &&
-    noValidationError
+  const noValidationError = new FieldsValidator()
+    .addValidator(title, 'Le titre de la table doit au moins contenir un caractère.')
+    .addValidator(pseudo, 'Le pseudonyme du MJ doit au moins contenir un caractère.')
+    .addValidator(name, 'Le prénom du MJ doit au moins contenir un caractère.')
+    .addValidator(players, 'Le nombre de joueurs doit être supérieur à 0')
+    .addValidator(description, 'La table doit contenir une description')
+    .validate()
 
   if (noValidationError) {
     const author = new Member(pseudo.value, name.value)

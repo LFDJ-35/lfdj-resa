@@ -1,4 +1,4 @@
-import { MdOutlinedTextField } from "@material/web/all"
+import type { TextField } from '@material/web/textfield/internal/text-field'
 
 /**
  * Permet de trouver récursivement un élément DOM par son attribut `name`.
@@ -31,16 +31,46 @@ function findRecursiveNamedItem(
   return found
 }
 
-function checkMdOutlinedTextFieldValidity(field: MdOutlinedTextField, errorMsg: string = "Champ invalide"): boolean {
+function checkMdOutlinedTextFieldValidity(
+  field: TextField,
+  errorMsg: string = 'Champ invalide',
+): boolean {
   if (!field.checkValidity()) {
-    field.error = true;
-    field.errorText = errorMsg;
-    return false;
+    field.error = true
+    field.errorText = errorMsg
+    return false
   }
 
-  field.error = false;
-  field.errorText = "";
-  return true;
+  field.error = false
+  field.errorText = ''
+  return true
 }
 
-export { findRecursiveNamedItem, checkMdOutlinedTextFieldValidity };
+type textFieldValidationFunction = (field: TextField, errorMsg: string) => boolean
+
+class FieldsValidator {
+  validators: Array<[TextField, string, textFieldValidationFunction]> = []
+
+  constructor() { }
+
+  addValidator(
+    field: TextField,
+    errorMsg: string,
+    validationFunction: textFieldValidationFunction = checkMdOutlinedTextFieldValidity,
+  ): FieldsValidator {
+    this.validators.push([field, errorMsg, validationFunction])
+    return this
+  }
+
+  validate(): boolean {
+    let noValidationError = true
+
+    for (const validator of this.validators) {
+      noValidationError = validator[2](validator[0], validator[1]) && noValidationError
+    }
+
+    return noValidationError
+  }
+}
+
+export { findRecursiveNamedItem, checkMdOutlinedTextFieldValidity, FieldsValidator }

@@ -1,17 +1,16 @@
 <script setup lang="ts">
+import '@material/web/icon/icon'
 
-import "@material/web/icon/icon";
+import { FAKE_MEMBERS } from '@/data/members'
+import { Member } from '@/models/member'
 
-import { FAKE_MEMBERS } from "@/data/members";
-import { Member } from "@/models/member";
+import { closeDialog, openDialog } from '@/utils/dialogs'
+import { findRecursiveNamedItem } from '@/utils/forms'
+import { MdChipSet, MdDialog, MdFilterChip, MdOutlinedTextField } from '@material/web/all'
+import { ref } from 'vue'
+import { FieldsValidator } from '@/utils/forms'
 
-import { closeDialog, openDialog } from "@/utils/dialogs";
-import { findRecursiveNamedItem } from "@/utils/forms";
-import { MdChipSet, MdDialog, MdFilterChip, MdOutlinedTextField } from "@material/web/all";
-import { ref } from "vue";
-import { checkMdOutlinedTextFieldValidity } from "@/utils/forms";
-
-type GameType = "JDF" | "JCC" | "JDP" | "JDR";
+type GameType = 'JDF' | 'JCC' | 'JDP' | 'JDR'
 
 interface IMemberSeeking {
   member: Member
@@ -51,11 +50,10 @@ function addMemberToSeekingMembers(): void {
   // Récupération des valeurs de chips
   const chips = (findRecursiveNamedItem(addMemberSeekingDialogRef.value, "jeux") as MdChipSet).chips as MdFilterChip[];
 
-  let noValidationError = true;
-
-  noValidationError = checkMdOutlinedTextFieldValidity(pseudo, "Le pseudo discord doit comporter au moins un caractère") && noValidationError;
-  noValidationError = checkMdOutlinedTextFieldValidity(prenom, "Le prénom doit comporter au moins un caractère") && noValidationError;
-
+  const noValidationError = new FieldsValidator()
+    .addValidator(pseudo, 'Le pseudo discord doit comporter au moins un caractère')
+    .addValidator(prenom, 'Le prénom doit comporter au moins un caractère')
+    .validate()
 
   const seeking = new Set<GameType>();
 
