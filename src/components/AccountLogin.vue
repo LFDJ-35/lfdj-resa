@@ -61,7 +61,7 @@ function logOut() {
     <h2 slot="headline" class="dialog-headline">Continuer en tant que</h2>
 
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-    <form name="content" slot="content" class="dialog-inscription" method="dialog">
+    <form name="content" slot="content" method="dialog">
       <p>Qui êtes-vous ?</p>
       <md-outlined-text-field required name="pseudo" label="Pseudo Discord" pattern=".+"
         placeholder="Pseudo Discord"></md-outlined-text-field>

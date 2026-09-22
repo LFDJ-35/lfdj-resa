@@ -76,7 +76,7 @@ function add_table() {
     <h2 slot="headline" class="dialog-headline">Ajout d'une nouvelle table</h2>
 
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-    <form name="content" slot="content" class="dialog-inscription" method="dialog">
+    <form name="content" slot="content" method="dialog">
       <p v-if="identity !== null">Ajouter une table en tant que {{ identity.toString() }}</p>
       <md-outlined-text-field required label="Titre de la table" name="title" pattern=".+"
         placeholder="Titre de la table"></md-outlined-text-field>

@@ -116,10 +116,10 @@ function addMemberToSeekingMembers(): void {
     <h2 slot="headline" class="dialog-headline">S'inscrire en tant que membre cherchant une table</h2>
 
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-    <form name="content" slot="content" class="dialog-inscription" method="dialog">
+    <form name="content" slot="content" method="dialog">
 
       <p v-if="identity === null">Qui êtes-vous ?</p>
-      <p v-else> Inscription en tant que {{ identity.toString() }}</p>
+      <p v-else><b>Inscription en tant que {{ identity.toString() }}</b></p>
 
       <span v-if="identity === null" name="identity">
         <md-outlined-text-field required name="pseudo" label="Pseudo Discord" pattern=".+"

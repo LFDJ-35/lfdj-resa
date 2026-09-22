@@ -144,7 +144,7 @@ function openRemovePlayerDialog(member: Member) {
     <h2 slot="headline" class="dialog-headline">Inscription d'un joueur à la table [{{ table.title }}]</h2>
 
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-    <form slot="content" class="dialog-inscription" method="dialog">
+    <form slot="content" method="dialog">
       <md-outlined-text-field required name="pseudo" label="Pseudo Discord" pattern=".+"
         placeholder="Pseudo du joueur"></md-outlined-text-field>
       <md-outlined-text-field required name="name" label="Prénom" pattern=".+"
