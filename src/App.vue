@@ -18,6 +18,7 @@ import type { LFDJSessionModel } from "./models/session.ts";
 import { filterStore } from "./stores/filters.ts";
 import { sessionStore } from "./stores/session.ts";
 import MembersSeeking from "./components/MembersSeeking.vue";
+import CarpoolBooking from "./components/CarpoolBooking.vue";
 import AccountLogin from "./components/AccountLogin.vue";
 
 // Membres en quête de jeu
@@ -69,7 +70,7 @@ function switch_active_session(event: Event) {
   </nav>
 
   <MembersSeeking v-if="!filterStore.hide.has(FILTER_ID_REC)" />
-  <div v-if="!filterStore.hide.has(FILTER_ID_COV)">Placeholder covoiturage</div>
+  <CarpoolBooking v-if="!filterStore.hide.has(FILTER_ID_COV)" />
   <TTRPGTablesViewer v-if="!filterStore.hide.has(FILTER_ID_JDR)" />
   <div v-if="!filterStore.hide.has(FILTER_ID_JDF)">Placeholder JDF</div>
   <div v-if="!filterStore.hide.has(FILTER_ID_JCC)">Placeholder JCC</div>

@@ -1,3 +1,4 @@
+import type { MdRadio } from '@material/web/all'
 import type { TextField } from '@material/web/textfield/internal/text-field'
 
 /**
@@ -29,6 +30,25 @@ function findRecursiveNamedItem(
   }
 
   return found
+}
+
+function findAllElementsWithTag(
+  root: Element,
+  tagToFind: string,
+  maxDepth: number = 5,
+): Array<Element> {
+  let foundElements: Array<Element> = []
+
+  if (root.tagName === tagToFind) {
+    foundElements.push(root)
+  }
+
+  for (const child of root.children) {
+    const foundElementsInChild = findAllElementsWithTag(child, tagToFind, maxDepth - 1)
+    foundElements = foundElements.concat(foundElementsInChild)
+  }
+
+  return foundElements
 }
 
 function checkMdOutlinedTextFieldValidity(
@@ -73,4 +93,23 @@ class FieldsValidator {
   }
 }
 
-export { findRecursiveNamedItem, checkMdOutlinedTextFieldValidity, FieldsValidator }
+class MdRadioGroup {
+  root: Element
+  radios: MdRadio[]
+
+  constructor(root: Element, maxDepth: number = 5) {
+    this.root = root
+    this.radios = findAllElementsWithTag(root, 'MD-RADIO', maxDepth) as MdRadio[]
+  }
+
+  getCheckedRadioButton(): MdRadio | null {
+    for (const radio of this.radios) {
+      if (radio.checked) {
+        return radio
+      }
+    }
+    return null
+  }
+}
+
+export { findRecursiveNamedItem, checkMdOutlinedTextFieldValidity, MdRadioGroup, FieldsValidator }
