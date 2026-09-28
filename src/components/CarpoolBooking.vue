@@ -11,34 +11,42 @@ import { Carpool, type CarpoolWhen, type ICarpool } from '@/models/carpool'
 import { Member } from '@/models/member'
 import { identity } from '@/stores/identity'
 import { FieldsValidator, findRecursiveNamedItem, MdRadioGroup } from '@/utils/forms'
+import YesNoDialog from './dialogs/YesNoDialog.vue'
 
 const location = 'VITRÉ'
 const LABEL_ADD_DRIVER = 'Proposer sa voiture'
 
 const addCarpoolDriverDialogRef = ref<MdDialog | null>(null)
-const addCarpoolPassengerDialogRef = ref<MdDialog | null>(null)
-const removeCarpoolDriverDialogRef = ref<MdDialog | null>(null)
-const removeCarpoolPassengerDialogRef = ref<MdDialog | null>(null)
+const addCarpoolPassengerDialogRef = ref<{ thisDialog: MdDialog } | null>(null)
+const removeCarpoolDriverDialogRef = ref<{ thisDialog: MdDialog } | null>(null)
+const removeCarpoolPassengerDialogRef = ref<{ thisDialog: MdDialog } | null>(null)
 
 const targetPassenger = ref<Member | null>(null)
 const targetCarpool = ref<ICarpool | null>(null)
 
 function openRemovePassengerFromCarpoolDialog(carpool: ICarpool, passenger: Member) {
+  if (removeCarpoolPassengerDialogRef.value === null) { return }
+
   targetCarpool.value = carpool
   targetPassenger.value = passenger
 
-  openDialog(removeCarpoolPassengerDialogRef.value)
+  openDialog(removeCarpoolPassengerDialogRef.value.thisDialog)
 }
 
 function openAddPassengerToCarpoolDialog(carpool: ICarpool) {
+  if (addCarpoolPassengerDialogRef.value === null) { return }
+
   targetCarpool.value = carpool
 
-  openDialog(addCarpoolPassengerDialogRef.value)
+  openDialog(addCarpoolPassengerDialogRef.value.thisDialog)
 }
 
 function openRemoveCarpoolDriverDialog(carpool: ICarpool) {
+  if (removeCarpoolDriverDialogRef.value === null) {
+    return
+  }
   targetCarpool.value = carpool
-  openDialog(removeCarpoolDriverDialogRef.value);
+  openDialog(removeCarpoolDriverDialogRef.value.thisDialog);
 }
 
 class CarpoolControl {
@@ -90,13 +98,14 @@ class CarpoolControl {
   }
 
   static removeCarpool(): void {
+    if (removeCarpoolDriverDialogRef.value === null) { return }
+
     if (targetCarpool.value !== null) {
       const carpoolIdx = CARPOOLS.value.findIndex((val, _idx, _arr) => val.id === targetCarpool.value!.id)
       if (carpoolIdx !== -1) {
         CARPOOLS.value.splice(carpoolIdx, 1)
       }
     }
-    closeDialog(removeCarpoolDriverDialogRef.value)
     targetCarpool.value = null;
   }
 }
@@ -109,19 +118,16 @@ class PassengersControl {
    * Supprime un passager d'un covoiturage
    */
   static removePassengerFromCarpool() {
-    targetCarpool.value?.removePassenger(targetPassenger.value)
+    if (targetCarpool.value === null) { return }
 
-    closeDialog(removeCarpoolPassengerDialogRef.value)
-
+    targetCarpool.value.removePassenger(targetPassenger.value)
     targetCarpool.value = null
     targetPassenger.value = null
   }
 
   static addPassengerToCarpool() {
-    targetCarpool.value?.addPassenger(identity.value)
-
-    closeDialog(addCarpoolPassengerDialogRef.value)
-
+    if (targetCarpool.value === null) { return }
+    targetCarpool.value.addPassenger(identity.value)
     targetCarpool.value = null
   }
 }
@@ -247,53 +253,20 @@ function identityIsDriver(carpool: ICarpool): boolean {
     </div>
   </md-dialog>
 
-  <md-dialog ref="addCarpoolPassengerDialogRef">
-    <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-    <h2 slot="headline" class="dialog-headline">S'inscrire en tant que passager</h2>
+  <YesNoDialog ref="addCarpoolPassengerDialogRef" title="Inscription au covoiturage"
+    :emphasis="'S\'inscrire en tant que ' + identity?.toString() + ' ?'" accept="Confirmer l'inscription"
+    refuse="Annuler" @accepted="PassengersControl.addPassengerToCarpool">
+  </YesNoDialog>
 
-    <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-    <form name="content" slot="content" method="dialog"></form>
+  <YesNoDialog ref="removeCarpoolPassengerDialogRef" title="Désinscrire le passager"
+    :emphasis="'Désinscrire le passager ' + targetPassenger?.toString() + ' ?'" accept="Confirmer la désinscription"
+    refuse="Annuler" @accepted="PassengersControl.removePassengerFromCarpool">
+  </YesNoDialog>
 
-    <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-    <div slot="actions">
-      <md-text-button @click="() => closeDialog(addCarpoolPassengerDialogRef)">Annuler</md-text-button>
-      <md-text-button @click="PassengersControl.addPassengerToCarpool">Confirmer l'inscription</md-text-button>
-    </div>
-  </md-dialog>
+  <YesNoDialog ref="removeCarpoolDriverDialogRef" title="Supprimer votre covoiturage ?"
+    emphasis="Merci de prévenir vos passagers." accept="Confirmer la suppression" refuse="Annuler"
+    @accepted="CarpoolControl.removeCarpool"></YesNoDialog>
 
-  <md-dialog ref="removeCarpoolPassengerDialogRef">
-    <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-    <h2 slot="headline" class="dialog-headline">
-      Supprimer le passager {{ targetPassenger?.toString() }} ?
-    </h2>
-
-    <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-    <form name="content" slot="content" method="dialog"></form>
-
-    <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-    <div slot="actions">
-      <md-text-button @click="() => closeDialog(removeCarpoolPassengerDialogRef)">Annuler</md-text-button>
-      <md-text-button @click="PassengersControl.removePassengerFromCarpool">Confirmer la suppression</md-text-button>
-    </div>
-  </md-dialog>
-
-  <md-dialog ref="removeCarpoolDriverDialogRef">
-    <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-    <h2 slot="headline" class="dialog-headline">
-      Supprimer votre covoiturage ?
-    </h2>
-
-    <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-    <form name="content" slot="content" method="dialog">
-      <p>Merci de prévenir vos passagers</p>
-    </form>
-
-    <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-    <div slot="actions">
-      <md-text-button @click="() => closeDialog(removeCarpoolDriverDialogRef)">Annuler</md-text-button>
-      <md-text-button @click="CarpoolControl.removeCarpool">Confirmer la suppression</md-text-button>
-    </div>
-  </md-dialog>
 </template>
 
 <style scoped>
