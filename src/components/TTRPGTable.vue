@@ -9,14 +9,14 @@ import "@material/web/list/list-item";
 import { MdOutlinedTextField } from "@material/web/all";
 import { MdDialog } from "@material/web/dialog/dialog";
 import { ref, type PropType } from "vue";
-import { AVAILABLE_MEMBER_SENTINEL } from "./data/members";
-import { format_date_hour } from "./formatters/date";
-import { Member } from "./models/member";
-import { TTRPGTableModel } from "./models/table_ttrpg";
+import { AVAILABLE_MEMBER_SENTINEL } from "../data/members";
+import { format_date_hour } from "../formatters/date";
+import { Member } from "../models/member";
+import { TTRPGTableModel } from "../models/table_ttrpg";
 
-import { closeDialog, openDialog } from "./utils/dialogs";
-import { FieldsValidator, findRecursiveNamedItem } from "./utils/forms";
-import { identity } from "./stores/identity";
+import { closeDialog, openDialog } from "../utils/dialogs";
+import { FieldsValidator, findRecursiveNamedItem } from "../utils/forms";
+import { identity } from "../stores/identity";
 
 const props = defineProps({
   table_data: { type: Object as PropType<TTRPGTableModel>, required: true }
