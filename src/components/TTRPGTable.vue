@@ -9,14 +9,14 @@ import "@material/web/list/list-item";
 import { MdOutlinedTextField } from "@material/web/all";
 import { MdDialog } from "@material/web/dialog/dialog";
 import { ref, type PropType } from "vue";
-import { AVAILABLE_MEMBER_SENTINEL } from "../data/members";
-import { format_date_hour } from "../formatters/date";
+import { formatDateHour } from "../formatters/date";
 import { Member } from "../models/member";
 import { TTRPGTableModel } from "../models/table_ttrpg";
 
 import { closeDialog, openDialog } from "../utils/dialogs";
 import { FieldsValidator, findRecursiveNamedItem } from "../utils/forms";
 import { identity } from "../stores/identity";
+import OnePlayerList from "./OnePlayerList.vue";
 
 const props = defineProps({
   table_data: { type: Object as PropType<TTRPGTableModel>, required: true }
@@ -31,7 +31,7 @@ const removePlayerDialogRef = ref<MdDialog | null>(null);
 
 function addPlayerWithIdentity() {
   if (identity.value !== null) {
-    table.value.add_player(identity.value);
+    table.value.addPlayer(identity.value);
     closeDialog(addPlayerDialogRef.value);
   }
 }
@@ -54,7 +54,7 @@ function addPlayer(): boolean {
   }
 
   console.debug(`Le membre [${pseudo.value} | ${name.value}] est ajouté à la table.`);
-  table.value.add_player(new Member(pseudo.value, name.value));
+  table.value.addPlayer(new Member(pseudo.value, name.value));
 
   closeDialog(addPlayerDialogRef.value);
 
@@ -63,9 +63,7 @@ function addPlayer(): boolean {
 
 function removePlayer(member: Member | null): boolean {
   if (member === null) { return false };
-
-  console.debug(`Le membre ${member.pseudo} est retiré de la table.`);;
-  return table.value.remove_player(member);
+  return table.value.removePlayer(member);
 }
 
 function openRemovePlayerDialog(member: Member) {
@@ -88,35 +86,21 @@ function openRemovePlayerDialog(member: Member) {
       <md-assist-chip aria-label="Nombre de Joueurs à la table" title="Nombre de Joueurs à la table">
         <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
         <md-icon slot="icon">group</md-icon>
-        <span>{{ table.player_number }}/{{ table.max_players }}</span>
+        <span>{{ table.players.length }}/{{ table.max_players }}</span>
       </md-assist-chip>
       <md-assist-chip aria-label="Heures de début et de fin" title="Heures de début et de fin">
         <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
         <md-icon slot="icon">nest_clock_farsight_analog</md-icon>
-        <span>{{ format_date_hour(table.from_date) }}-{{ format_date_hour(table.to_date) }}</span>
+        <span>{{ formatDateHour(table.from_date) }}-{{ formatDateHour(table.to_date) }}</span>
       </md-assist-chip>
     </md-chip-set>
 
     <p>{{ table.description }}</p>
 
-    <md-list class="player-list">
-      <template v-for="member in table.players" :key="member.id">
-        <md-list-item v-if="member.id !== AVAILABLE_MEMBER_SENTINEL.id">
-          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-          <div slot="headline"> {{ member.toString() }} </div>
-          <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-          <md-icon class="clickable" slot="end" @click="() => openRemovePlayerDialog(member)">person_remove</md-icon>
-        </md-list-item>
-      </template>
+    <OnePlayerList :members="table.players" @add="openDialog(addPlayerDialogRef)" @remove="openRemovePlayerDialog"
+      :can-add-member="table.canInsertPlayer()">
+    </OnePlayerList>
 
-      <md-list-item v-if="table.canInsertPlayer()" @click="() => openDialog(addPlayerDialogRef)" class="clickable"
-        title="Cliquez pour inscrire un joueur" aria-label="Inscrire un joueur">
-        <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-        <div slot="headline"> Disponible </div>
-        <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-        <md-icon slot="end">person_add</md-icon>
-      </md-list-item>
-    </md-list>
   </section>
 
   <!--

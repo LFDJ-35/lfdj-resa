@@ -2,7 +2,7 @@
 import { MdDialog, MdOutlinedTextField } from '@material/web/all'
 import '@material/web/tabs/tabs'
 import { ref } from 'vue'
-import { format_date_day } from './formatters/date.ts'
+import { formatDateDay } from './formatters/date.ts'
 import { Member } from './models/member.ts'
 import { TTRPGTableModel } from './models/table_ttrpg.ts'
 import { sessionStore } from './stores/session.ts'
@@ -50,6 +50,7 @@ function add_table() {
       sessionStore.current.to_date,
       description.value,
       author!,
+      [],
       players.valueAsNumber,
     )
 
@@ -62,7 +63,7 @@ function add_table() {
 </script>
 
 <template>
-  <h2>Tables de jeu de rôle du {{ format_date_day(sessionStore.current.from_date) }}</h2>
+  <h2>Tables de jeu de rôle du {{ formatDateDay(sessionStore.current.from_date) }}</h2>
   <article class="card-section">
     <TTRPGTable v-for="table in sessionStore.current.tables" :key="table.title" :table_data="table" />
     <div class="add-element-box" @click="() => openDialog(dialogRef)">

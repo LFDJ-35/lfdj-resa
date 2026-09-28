@@ -1,12 +1,10 @@
 import { Member } from './member'
 import { SessionEvent } from './event'
-import { AVAILABLE_MEMBER_SENTINEL } from '@/data/members'
 
 class TTRPGTableModel extends SessionEvent {
   max_players: number
   author: Member
   players: Member[]
-  player_number: number = 0
 
   constructor(
     title: string,
@@ -14,48 +12,40 @@ class TTRPGTableModel extends SessionEvent {
     to_date: Date,
     description: string,
     author: Member,
+    players: Member[],
     max_players: number,
   ) {
     super(title, from_date, to_date, description)
     this.author = author
     this.max_players = max_players
-    this.players = Array.from({ length: max_players })
-    this.players.fill(AVAILABLE_MEMBER_SENTINEL, 0, max_players)
+    this.players = players
   }
 
-  add_player(member: Member): boolean {
-    const first_available = this.players.findIndex(
-      (value, _idx, _arr) => value.id === AVAILABLE_MEMBER_SENTINEL.id,
-    )
+  addPlayer(member: Member): boolean {
 
-    if (first_available === -1) {
-      return false
-    }
-
-    this.players[first_available] = member
-    this.player_number++
-    return true
-  }
-
-  remove_player(member: Member): boolean {
-    if (AVAILABLE_MEMBER_SENTINEL.id == member.id) {
+    if (!this.canInsertPlayer()) {
       return false;
     }
 
-    const to_remove_idx = this.players.findIndex((value, _idx, _arr) => (value.id === member.id))
+    this.players.push(member);
+    return true
+  }
 
-    if (to_remove_idx === -1) {
+  removePlayer(member: Member): boolean {
+    const toRemoveIdx = this.players.findIndex((value, _idx, _arr) => (value.id === member.id))
+
+    if (toRemoveIdx === -1) {
       return false
     }
 
-    this.players[to_remove_idx] = AVAILABLE_MEMBER_SENTINEL
-    this.player_number--
+    this.players.splice(toRemoveIdx, 1)
     return true
   }
 
   canInsertPlayer(): boolean {
-    return this.players.find((member, _idx, _arr) => member.id === AVAILABLE_MEMBER_SENTINEL.id) !== undefined
+    return (this.players.length < this.max_players);
   }
+
 }
 
 export { TTRPGTableModel }

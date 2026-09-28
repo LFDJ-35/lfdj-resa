@@ -21,7 +21,7 @@ function add_leading_zero(n: number): string {
   return `0${n}`;
 }
 
-function format_date_day(date: Date | undefined | null): string {
+function formatDateDay(date: Date | undefined | null): string {
 
   if (date === undefined || date === null) { return "" }
 
@@ -31,7 +31,7 @@ function format_date_day(date: Date | undefined | null): string {
   return `${day} ${month} ${date.getFullYear()}`
 }
 
-function format_date_hour(date: Date | undefined | null): string {
+function formatDateHour(date: Date | undefined | null): string {
   if (date === undefined || date === null) { return "--:--" }
 
   const hours = add_leading_zero(date.getHours());
@@ -40,4 +40,4 @@ function format_date_hour(date: Date | undefined | null): string {
   return `${hours}:${minutes}`;
 }
 
-export { format_date_day, format_date_hour }
+export { formatDateDay, formatDateHour }

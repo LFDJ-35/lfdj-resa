@@ -12,7 +12,7 @@ import { MdTabs } from "@material/web/tabs/tabs";
 import TTRPGTablesViewer from './TTRPGTablesViewer.vue';
 import FilterChips from "./components/FilterChips.vue";
 import { FAKE_SESSIONS } from "./data/sessions.ts";
-import { format_date_day } from "./formatters/date.ts";
+import { formatDateDay } from "./formatters/date.ts";
 import type { FilterChipModel } from "./models/filter_chip.ts";
 import type { LFDJSessionModel } from "./models/session.ts";
 import { filterStore } from "./stores/filters.ts";
@@ -62,7 +62,7 @@ function switch_active_session(event: Event) {
     <md-tabs @change="switch_active_session">
       <md-primary-tab v-for="(session, index) in FAKE_SESSIONS" :key="session.from_date"
         :class="{ 'active': index === 0 }">{{
-          format_date_day(session.from_date) }}
+          formatDateDay(session.from_date) }}
       </md-primary-tab>
     </md-tabs>
     <FilterChips id="filter-chips" :chips=FILTER_CHIPS></FilterChips>
