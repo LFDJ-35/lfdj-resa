@@ -1,5 +1,5 @@
-import { v4 } from 'uuid'
 import { Member } from './member'
+import { identifier } from './identifier'
 
 type CarpoolWhen = 'Après-midi' | 'Soirée'
 
@@ -18,12 +18,12 @@ interface ICarpool {
 }
 
 class Carpool implements ICarpool {
+  id: string
   driver: Member
   from: string
   when: CarpoolWhen
   passengers: Member[]
   max_passengers: number
-  id: string
 
   constructor(
     driver: Member,
@@ -33,17 +33,12 @@ class Carpool implements ICarpool {
     maxPassengers: number,
     id: string | null = null
   ) {
+    this.id = identifier(id)
     this.driver = driver
     this.from = from
     this.when = when
     this.passengers = passengers
     this.max_passengers = maxPassengers
-
-    if (id === null) {
-      this.id = v4();
-    } else {
-      this.id = id;
-    }
   }
 
   has(member: Member | null): boolean {

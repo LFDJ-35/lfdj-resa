@@ -9,22 +9,27 @@ import "@material/web/list/list-item";
 import { formatDateHour } from "@/formatters/date.ts";
 import { Member } from "@/models/member.ts";
 import { JDFTableModel } from "@/models/table_jdf.ts";
-import { MdDialog } from "@material/web/dialog/dialog";
 import { ref, type PropType } from "vue";
 
 import OnePlayerList from "@/components/OnePlayerList.vue";
 import YesNoDialog from "@/components/dialogs/YesNoDialog.vue";
 import { identity } from "@/stores/identity.ts";
 import { openDialog } from "@/utils/dialogs.ts";
+import { type YesNoDialogRef } from "@/utils/dialogs.ts";
 
 const props = defineProps({
   tableData: { type: Object as PropType<JDFTableModel>, required: true }
 });
 
+defineEmits<{
+  (e: 'remove'): void
+}>();
+
 const table = ref(props.tableData);
 
-const addSelfDialogRef = ref<{ thisDialog: MdDialog } | null>(null);
-const removeMemberDialogRef = ref<{ thisDialog: MdDialog } | null>(null);
+const addSelfDialogRef = ref<YesNoDialogRef | null>(null);
+const removeMemberDialogRef = ref<YesNoDialogRef | null>(null);
+const removeTableDialogRef = ref<YesNoDialogRef | null>(null);
 
 const memberToRemove = ref<Member | null>(null);
 
@@ -77,7 +82,7 @@ function openRemovePlayerDialog(member: Member) {
     :author="table.author"
     @add="openDialog(addSelfDialogRef?.thisDialog!)"
     @remove="openRemovePlayerDialog"
-    @author-remove="()=>{ console.error('Non implémenté.') }">
+    @author-remove="() => openDialog(removeTableDialogRef?.thisDialog)">
   </OnePlayerList>
 
   </section>
@@ -90,6 +95,16 @@ function openRemovePlayerDialog(member: Member) {
   <YesNoDialog ref="removeMemberDialogRef" title="Désinscription"
     :emphasis="'Confirmer la désinscription de ' + memberToRemove?.toString() + ' ?'" accept="Désincrire"
     refuse="Annuler" @accepted="() => { removePlayer(memberToRemove) }">
+  </YesNoDialog>
+
+  <YesNoDialog
+    ref="removeTableDialogRef"
+    title="Suppression de la table"
+    question="Supprimer la table ?"
+    emphasis="Pensez à en informer vos joueurs."
+    accept="Confirmer la suppression"
+    refuse="Annuler"
+    @accepted="$emit('remove')">
   </YesNoDialog>
 
 </template>

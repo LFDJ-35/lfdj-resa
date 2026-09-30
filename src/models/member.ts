@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+import { identifier } from "./identifier";
 
 class Member {
   id: string;
@@ -6,12 +6,7 @@ class Member {
   name: string;
 
   constructor(pseudo: string, name: string, id: string | undefined | null = undefined) {
-    if (id === undefined || id === null) {
-      this.id = uuidv4();
-    }
-    else {
-      this.id = id;
-    }
+    this.id = identifier(id);
     this.pseudo = pseudo;
     this.name = name;
   }

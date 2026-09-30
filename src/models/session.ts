@@ -21,6 +21,14 @@ class LFDJSessionModel extends SessionEvent {
     // TODO : Enregistrer la table en base de données.
     this.tables.push(table)
   }
+
+  removeTable(table: TableModel){
+    // TODO : Supprimer la table en base de données.
+    const idx = this.tables.findIndex((val) => val.id === table.id)
+    if(idx === -1){ return }
+
+    this.tables.splice(idx, 1);
+  }
 }
 
 export { LFDJSessionModel }

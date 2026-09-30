@@ -67,7 +67,9 @@ function validateAndAddTable() {
 <template>
   <h2>Tables de jeu de figurines du {{ formatDateDay(sessionStore.current.from_date) }}</h2>
   <article class="card-section">
-    <JDFTable v-for="table in jdfTables" :key="table.title" :tableData="table" />
+    <JDFTable
+      v-for="table in jdfTables" :key="table.title" :tableData="table"
+      @remove="() => sessionStore.current.removeTable(table)" />
     <div class="add-element-box" @click="() => openDialog(dialogRef)">
       <md-icon>add</md-icon>
       <p>Ajouter une table de jeu de figurines</p>
