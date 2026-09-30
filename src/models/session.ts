@@ -1,12 +1,12 @@
-import { TTRPGTableModel } from "./table_ttrpg";
+import { TableModel } from "./table_session";
 import type { Place } from "./place";
 import { SessionEvent } from "./event";
 
 class LFDJSessionModel extends SessionEvent {
 
-  tables: TTRPGTableModel[] = [];
+  tables: TableModel[] = [];
 
-  constructor(date: Date, place: Place, tables: TTRPGTableModel[]) {
+  constructor(date: Date, place: Place, tables: TableModel[]) {
 
     const begin_date = new Date(date.getTime());
     const end_date = new Date(date.getTime());
@@ -15,6 +15,11 @@ class LFDJSessionModel extends SessionEvent {
 
     super("Session de jeu", begin_date, end_date, "Session de jeu de La Forge des Joueurs");
     this.tables = tables;
+  }
+
+  addTable(table: TableModel){
+    // TODO : Enregistrer la table en base de données.
+    this.tables.push(table)
   }
 }
 

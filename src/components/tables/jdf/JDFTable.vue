@@ -6,22 +6,22 @@ import "@material/web/icon/icon";
 import "@material/web/list/list";
 import "@material/web/list/list-item";
 
+import { formatDateHour } from "@/formatters/date.ts";
+import { Member } from "@/models/member.ts";
+import { JDFTableModel } from "@/models/table_jdf.ts";
 import { MdDialog } from "@material/web/dialog/dialog";
 import { ref, type PropType } from "vue";
-import { formatDateHour } from "../formatters/date";
-import { Member } from "../models/member";
-import { TTRPGTableModel } from "../models/table_ttrpg";
 
-import { identity } from "../stores/identity";
-import { openDialog } from "../utils/dialogs";
-import OnePlayerList from "./OnePlayerList.vue";
-import YesNoDialog from "./dialogs/YesNoDialog.vue";
+import OnePlayerList from "@/components/OnePlayerList.vue";
+import YesNoDialog from "@/components/dialogs/YesNoDialog.vue";
+import { identity } from "@/stores/identity.ts";
+import { openDialog } from "@/utils/dialogs.ts";
 
 const props = defineProps({
-  table_data: { type: Object as PropType<TTRPGTableModel>, required: true }
+  tableData: { type: Object as PropType<JDFTableModel>, required: true }
 });
 
-const table = ref(props.table_data);
+const table = ref(props.tableData);
 
 const addSelfDialogRef = ref<{ thisDialog: MdDialog } | null>(null);
 const removeMemberDialogRef = ref<{ thisDialog: MdDialog } | null>(null);
@@ -52,7 +52,7 @@ function openRemovePlayerDialog(member: Member) {
     <h3>{{ table.title }}</h3>
 
     <md-chip-set>
-      <md-assist-chip aria-label="Maître du Jeu" title="Maître du Jeu">
+      <md-assist-chip aria-label="Auteur de la table" title="Auteur de la table">
         <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
         <md-icon slot="icon">person</md-icon>
         {{ table.author.toString() }}
@@ -71,9 +71,14 @@ function openRemovePlayerDialog(member: Member) {
 
     <p>{{ table.description }}</p>
 
-    <OnePlayerList :members="table.players" @add="openDialog(addSelfDialogRef?.thisDialog!)" :author="table.author"
-      @remove="openRemovePlayerDialog" :can-add-member="table.canInsertPlayer() && identity !== null">
-    </OnePlayerList>
+    <OnePlayerList
+    :members="table.players"
+    :can-add-member="table.canInsertPlayer() && identity !== null"
+    :author="table.author"
+    @add="openDialog(addSelfDialogRef?.thisDialog!)"
+    @remove="openRemovePlayerDialog"
+    @author-remove="()=>{ console.error('Non implémenté.') }">
+  </OnePlayerList>
 
   </section>
 

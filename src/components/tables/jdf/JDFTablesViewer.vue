@@ -1,23 +1,23 @@
 <script setup lang="ts">
+import JDFTable from '@/components/tables/jdf/JDFTable.vue'
+import { formatDateDay } from '@/formatters/date.ts'
+import { Member } from '@/models/member.ts'
+import { JDFTableModel } from '@/models/table_jdf'
+import { identity } from '@/stores/identity.ts'
+import { sessionStore } from '@/stores/session.ts'
+import { closeDialog, openDialog } from '@/utils/dialogs.ts'
+import { FieldsValidator, findRecursiveNamedItem } from '@/utils/forms.ts'
 import { MdDialog, MdOutlinedTextField } from '@material/web/all'
 import '@material/web/tabs/tabs'
 import { computed, ref } from 'vue'
-import { formatDateDay } from './formatters/date.ts'
-import { Member } from './models/member.ts'
-import { TTRPGTableModel } from './models/table_ttrpg.ts'
-import { sessionStore } from './stores/session.ts'
-import TTRPGTable from './components/TTRPGTable.vue'
-import { closeDialog, openDialog } from './utils/dialogs.ts'
-import { FieldsValidator, findRecursiveNamedItem } from './utils/forms.ts'
-import { identity } from './stores/identity.ts'
 
 const dialogRef = ref<MdDialog | null>(null)
 
-const jdrTables = computed(() => sessionStore.current.tables
-.filter((val) => val.type === "Jeu de rôle")
+const jdfTables = computed(() => sessionStore.current.tables
+.filter((val) => val.type === "Jeu de figurines")
 )
 
-function add_table() {
+function validateAndAddTable() {
   console.log(dialogRef.value)
 
   if (dialogRef.value === null) {
@@ -48,7 +48,7 @@ function add_table() {
       author = new Member(pseudo.value, name.value);
     }
 
-    const table = new TTRPGTableModel(
+    const table = new JDFTableModel(
       title.value,
       sessionStore.current.from_date,
       sessionStore.current.to_date,
@@ -65,12 +65,12 @@ function add_table() {
 </script>
 
 <template>
-  <h2>Tables de jeu de rôle du {{ formatDateDay(sessionStore.current.from_date) }}</h2>
+  <h2>Tables de jeu de figurines du {{ formatDateDay(sessionStore.current.from_date) }}</h2>
   <article class="card-section">
-    <TTRPGTable v-for="table in jdrTables" :key="table.title" :table_data="table" />
+    <JDFTable v-for="table in jdfTables" :key="table.title" :tableData="table" />
     <div class="add-element-box" @click="() => openDialog(dialogRef)">
       <md-icon>add</md-icon>
-      <p>Ajouter une table de jeu de rôle</p>
+      <p>Ajouter une table de jeu de figurines</p>
     </div>
   </article>
 
@@ -98,7 +98,7 @@ function add_table() {
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
     <div slot="actions">
       <md-text-button @click="() => closeDialog(dialogRef)">Annuler</md-text-button>
-      <md-text-button @click="add_table">Ajouter la table</md-text-button>
+      <md-text-button @click="validateAndAddTable">Ajouter la table</md-text-button>
     </div>
   </md-dialog>
 </template>

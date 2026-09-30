@@ -9,17 +9,18 @@ import "@material/web/tabs/tabs";
 import { ref } from "vue";
 
 import { MdTabs } from "@material/web/tabs/tabs";
-import TTRPGTablesViewer from './TTRPGTablesViewer.vue';
-import FilterChips from "./components/FilterChips.vue";
-import { FAKE_SESSIONS } from "./data/sessions.ts";
-import { formatDateDay } from "./formatters/date.ts";
-import type { FilterChipModel } from "./models/filter_chip.ts";
-import type { LFDJSessionModel } from "./models/session.ts";
-import { filterStore } from "./stores/filters.ts";
-import { sessionStore } from "./stores/session.ts";
-import MembersSeeking from "./components/MembersSeeking.vue";
-import CarpoolBooking from "./components/CarpoolBooking.vue";
-import AccountLogin from "./components/AccountLogin.vue";
+import TTRPGTablesViewer from '@/TTRPGTablesViewer.vue';
+import FilterChips from "@/components/FilterChips.vue";
+import { FAKE_SESSIONS } from "@/data/sessions.ts";
+import { formatDateDay } from "@/formatters/date.ts";
+import type { FilterChipModel } from "@/models/filter_chip.ts";
+import type { LFDJSessionModel } from "@/models/session.ts";
+import { filterStore } from "@/stores/filters.ts";
+import { sessionStore } from "@/stores/session.ts";
+import MembersSeeking from "@/components/MembersSeeking.vue";
+import CarpoolBooking from "@/components/CarpoolBooking.vue";
+import AccountLogin from "@/components/AccountLogin.vue";
+import JDFTablesViewer from "@/components/tables/jdf/JDFTablesViewer.vue";
 
 // Membres en quête de jeu
 const FILTER_ID_REC = "rec";
@@ -72,7 +73,7 @@ function switch_active_session(event: Event) {
   <MembersSeeking v-if="!filterStore.hide.has(FILTER_ID_REC)" />
   <CarpoolBooking v-if="!filterStore.hide.has(FILTER_ID_COV)" />
   <TTRPGTablesViewer v-if="!filterStore.hide.has(FILTER_ID_JDR)" />
-  <div v-if="!filterStore.hide.has(FILTER_ID_JDF)">Placeholder JDF</div>
+  <JDFTablesViewer v-if="!filterStore.hide.has(FILTER_ID_JDF)" />
   <div v-if="!filterStore.hide.has(FILTER_ID_JCC)">Placeholder JCC</div>
 
   <AccountLogin />

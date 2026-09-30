@@ -7,21 +7,32 @@ import '@material/web/list/list-item'
 
 import { Member } from '../models/member'
 import { type PropType } from 'vue'
+import { memberIsIdentity } from '@/stores/identity'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emit = defineEmits<{
   (e: 'remove', member: Member): void
   (e: 'add'): void
+  (e: 'author-remove'): void
 }>()
 
 const props = defineProps({
   members: { type: Object as PropType<Member[]>, required: true },
   canAddMember: Boolean,
+  author: { type : Object as PropType<Member> },
 })
 </script>
 
 <template>
   <md-list class="player-list">
+    <md-list-item v-if="props.author">
+      <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
+      <div slot="headline">{{ props.author?.toString() }}</div>
+      <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
+      <md-icon v-if="!memberIsIdentity(author)" slot="end">crown</md-icon>
+      <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
+      <md-icon v-else class="clickable" slot="end" @click="$emit('author-remove')">delete</md-icon>
+    </md-list-item>
     <template v-for="member in props.members" :key="member.id">
       <md-list-item>
         <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
