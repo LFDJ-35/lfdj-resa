@@ -17,7 +17,7 @@ const jdrTables = computed(() => sessionStore.current.tables
 .filter((val) => val.type === "Jeu de rôle")
 )
 
-function add_table() {
+function validateAndAddTable() {
   console.log(dialogRef.value)
 
   if (dialogRef.value === null) {
@@ -67,7 +67,10 @@ function add_table() {
 <template>
   <h2>Tables de jeu de rôle du {{ formatDateDay(sessionStore.current.from_date) }}</h2>
   <article class="card-section">
-    <TTRPGTable v-for="table in jdrTables" :key="table.title" :table_data="table" />
+    <TTRPGTable
+      v-for="table in jdrTables" :key="table.title"
+      :table_data="table"
+      @remove="sessionStore.current.removeTable(table)" />
     <div class="add-element-box" @click="() => openDialog(dialogRef)">
       <md-icon>add</md-icon>
       <p>Ajouter une table de jeu de rôle</p>
@@ -98,7 +101,7 @@ function add_table() {
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
     <div slot="actions">
       <md-text-button @click="() => closeDialog(dialogRef)">Annuler</md-text-button>
-      <md-text-button @click="add_table">Ajouter la table</md-text-button>
+      <md-text-button @click="validateAndAddTable">Ajouter la table</md-text-button>
     </div>
   </md-dialog>
 </template>

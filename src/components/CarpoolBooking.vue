@@ -9,7 +9,7 @@ import { ref } from 'vue'
 import { FAKE_CARPOOLS } from '@/data/carpool_drivers'
 import { Carpool, type CarpoolWhen, type ICarpool } from '@/models/carpool'
 import { Member } from '@/models/member'
-import { identity } from '@/stores/identity'
+import { identity, memberIsIdentity } from '@/stores/identity'
 import { FieldsValidator, findRecursiveNamedItem, MdRadioGroup } from '@/utils/forms'
 import YesNoDialog from './dialogs/YesNoDialog.vue'
 
@@ -152,11 +152,6 @@ function showAvailablePassengerSlot(carpool: ICarpool): boolean {
 
   return !isMemberInCarpools(identity.value);
 }
-
-function identityIsDriver(carpool: ICarpool): boolean {
-  if (identity.value === null) return false;
-  return identity.value.id === carpool.driver.id
-}
 </script>
 
 <template>
@@ -187,7 +182,7 @@ function identityIsDriver(carpool: ICarpool): boolean {
           <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
           <div slot="headline">{{ carpool.driver.toString() }}</div>
           <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-          <md-icon v-if="identityIsDriver(carpool)" class="clickable" slot="end"
+          <md-icon v-if="memberIsIdentity(carpool.driver)" class="clickable" slot="end"
             @click="openRemoveCarpoolDriverDialog(carpool)">delete</md-icon>
           <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
           <md-icon v-else slot="end">search_hands_free</md-icon>
@@ -236,12 +231,12 @@ function identityIsDriver(carpool: ICarpool): boolean {
       <p>Quand ?</p>
       <div name="radio-group" class="radio-group" role="radiogroup" aria-labelledby="periode">
         <span class="radio-and-label">
-          <label for="Après-midi">Après-midi</label>
-          <md-radio name="periode" value="Après-midi" aria-label="Après-midi"></md-radio>
+          <label for="carpool-am">Après-midi</label>
+          <md-radio id="carpool-am" name="periode" value="Après-midi" aria-label="Après-midi"></md-radio>
         </span>
         <span class="radio-and-label">
-          <label for="Soirée">Soirée</label>
-          <md-radio name="periode" value="Soirée" aria-label="Soirée"></md-radio>
+          <label for="carpool-soiree">Soirée</label>
+          <md-radio id="carpool-soiree" name="periode" value="Soirée" aria-label="Soirée"></md-radio>
         </span>
       </div>
     </form>

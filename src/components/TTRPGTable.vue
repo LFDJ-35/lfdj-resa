@@ -6,7 +6,6 @@ import "@material/web/icon/icon";
 import "@material/web/list/list";
 import "@material/web/list/list-item";
 
-import { MdDialog } from "@material/web/dialog/dialog";
 import { ref, type PropType } from "vue";
 import { formatDateHour } from "../formatters/date";
 import { Member } from "../models/member";
@@ -16,6 +15,7 @@ import { identity } from "../stores/identity";
 import { openDialog } from "../utils/dialogs";
 import OnePlayerList from "./OnePlayerList.vue";
 import YesNoDialog from "./dialogs/YesNoDialog.vue";
+import { type YesNoDialogRef } from "../utils/dialogs";
 
 const props = defineProps({
   table_data: { type: Object as PropType<TTRPGTableModel>, required: true }
@@ -23,8 +23,9 @@ const props = defineProps({
 
 const table = ref(props.table_data);
 
-const addSelfDialogRef = ref<{ thisDialog: MdDialog } | null>(null);
-const removeMemberDialogRef = ref<{ thisDialog: MdDialog } | null>(null);
+const addSelfDialogRef = ref<YesNoDialogRef | null>(null);
+const removeMemberDialogRef = ref<YesNoDialogRef | null>(null);
+const removeTableDialogRef = ref<YesNoDialogRef | null>(null);
 
 const memberToRemove = ref<Member | null>(null);
 
@@ -44,6 +45,10 @@ function openRemovePlayerDialog(member: Member) {
   memberToRemove.value = member;
   openDialog(removeMemberDialogRef.value.thisDialog);
 }
+
+defineEmits<{
+  (e: 'remove') : void
+}>()
 
 </script>
 
@@ -71,8 +76,13 @@ function openRemovePlayerDialog(member: Member) {
 
     <p>{{ table.description }}</p>
 
-    <OnePlayerList :members="table.players" @add="openDialog(addSelfDialogRef?.thisDialog!)" :author="table.author"
-      @remove="openRemovePlayerDialog" :can-add-member="table.canInsertPlayer() && identity !== null">
+    <OnePlayerList
+      @add="openDialog(addSelfDialogRef?.thisDialog!)"
+      @author-remove="openDialog(removeTableDialogRef?.thisDialog)"
+      @remove="openRemovePlayerDialog"
+      :members="table.players"
+      :author="table.author"
+      :can-add-member="table.canInsertPlayer() && identity !== null">
     </OnePlayerList>
 
   </section>
@@ -85,6 +95,11 @@ function openRemovePlayerDialog(member: Member) {
   <YesNoDialog ref="removeMemberDialogRef" title="Désinscription"
     :emphasis="'Confirmer la désinscription de ' + memberToRemove?.toString() + ' ?'" accept="Désincrire"
     refuse="Annuler" @accepted="() => { removePlayer(memberToRemove) }">
+  </YesNoDialog>
+
+  <YesNoDialog ref="removeTableDialogRef" title="Suppression de la table"
+    :emphasis="'Confirmer la suppression de la table ' + table.title + ' ?'" accept="Désincrire"
+    refuse="Annuler" @accepted="$emit('remove')">
   </YesNoDialog>
 
 </template>
