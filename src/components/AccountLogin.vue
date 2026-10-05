@@ -46,6 +46,12 @@ function logOut() {
   identity.value = null
   closeDialog(logoutDialogRef.value)
 }
+
+// Par défaut, si aucune identité n'est présente, cette modale est ouverte.
+if(identity.value === null)
+{
+  openDialog(loginDialogRef.value);
+}
 </script>
 
 <template>
@@ -56,7 +62,8 @@ function logOut() {
     <md-icon v-else slot="icon">logout</md-icon>
   </md-fab>
 
-  <md-dialog ref="loginDialogRef">
+  <!-- Par défaut, la modale est ouverte. -->
+  <md-dialog v-if="identity === null" ref="loginDialogRef" open>
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
     <h2 slot="headline" class="dialog-headline">Continuer en tant que</h2>
 
