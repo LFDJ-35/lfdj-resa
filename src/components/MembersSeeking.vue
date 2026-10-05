@@ -4,12 +4,11 @@ import '@material/web/icon/icon'
 import { FAKE_MEMBERS } from '@/data/members'
 import { Member } from '@/models/member'
 
+import { identity } from '@/stores/identity'
 import { closeDialog, openDialog } from '@/utils/dialogs'
 import { findRecursiveNamedItem } from '@/utils/forms'
-import { MdChipSet, MdDialog, MdFilterChip, MdOutlinedTextField } from '@material/web/all'
-import { ref } from 'vue'
-import { FieldsValidator } from '@/utils/forms'
-import { identity } from '@/stores/identity'
+import { MdChipSet, MdDialog, MdFilterChip } from '@material/web/all'
+import { computed, ref, type ComputedRef } from 'vue'
 
 type GameType = 'JDF' | 'JCC' | 'JDP' | 'JDR'
 
@@ -19,76 +18,63 @@ interface IMemberSeeking {
 }
 
 const MEMBERS_SEEKING = ref([
-  { member: FAKE_MEMBERS[0]!, seeking: new Set(["JDF", "JDR", "JDP"]) },
-  { member: FAKE_MEMBERS[1]!, seeking: new Set(["JDF", "JCC", "JDP"]) },
-  { member: FAKE_MEMBERS[2]!, seeking: new Set(["JDF"]) },
-  { member: FAKE_MEMBERS[1]!, seeking: new Set(["JDF", "JDR", "JDP"]) },
-  { member: FAKE_MEMBERS[2]!, seeking: new Set(["JDF", "JDR", "JDP"]) },
-  { member: FAKE_MEMBERS[0]!, seeking: new Set(["JDF", "JDR", "JDP"]) },
+  { member: FAKE_MEMBERS[0]!, seeking: new Set(['JDF', 'JDR', 'JDP']) },
+  { member: FAKE_MEMBERS[1]!, seeking: new Set(['JDF', 'JCC', 'JDP']) },
+  { member: FAKE_MEMBERS[2]!, seeking: new Set(['JDF']) },
+  { member: FAKE_MEMBERS[1]!, seeking: new Set(['JDF', 'JDR', 'JDP']) },
+  { member: FAKE_MEMBERS[2]!, seeking: new Set(['JDF', 'JDR', 'JDP']) },
+  { member: FAKE_MEMBERS[0]!, seeking: new Set(['JDF', 'JDR', 'JDP']) },
 ])
 
 const ICON_MAP: Map<GameType, string> = new Map([
-  ["JDF", "swords"],
-  ["JCC", "playing_cards"],
-  ["JDR", "casino"],
-  ["JDP", "chess"]
+  ['JDF', 'swords'],
+  ['JCC', 'playing_cards'],
+  ['JDR', 'casino'],
+  ['JDP', 'chess'],
 ])
 
-const LABEL_ADD_MEMBER_SEEKING_TABLE = "S'inscrire en tant que membre recherchant une table";
+const LABEL_ADD_MEMBER_SEEKING_TABLE = "S'inscrire en tant que membre recherchant une table"
 
-const addMemberSeekingDialogRef = ref<MdDialog | null>(null);
+const addMemberSeekingDialogRef = ref<MdDialog | null>(null)
+
+const identityInMembersSeeking: ComputedRef<boolean> = computed(() => {
+  const identityMember = identity.value
+  return (
+    identityMember !== null &&
+    MEMBERS_SEEKING.value.find((val) => val.member.id === identityMember.id) === undefined
+  )
+})
 
 function addMemberToSeekingMembers(): void {
-
-  if (addMemberSeekingDialogRef.value === null) {
-    return;
-  }
-
-  // Par défaut, utilisation de l'identité de l'utilisateur connecté
-  let member = identity.value
-
-  // Sinon, validation des champs.
-  if (identity.value === null) {
-
-    // Récupération du nom et pseudo
-    const pseudo = findRecursiveNamedItem(addMemberSeekingDialogRef.value, "pseudo") as MdOutlinedTextField;
-    const prenom = findRecursiveNamedItem(addMemberSeekingDialogRef.value, "prenom") as MdOutlinedTextField;
-    const noValidationError = new FieldsValidator()
-      .addValidator(pseudo, 'Le pseudo discord doit comporter au moins un caractère')
-      .addValidator(prenom, 'Le prénom doit comporter au moins un caractère')
-      .validate()
-
-    if (noValidationError) {
-      member = new Member(pseudo.value, prenom.value);
-    }
+  if (addMemberSeekingDialogRef.value === null || identity.value === null) {
+    return
   }
 
   // Récupération des valeurs de chips
-  const chips = (findRecursiveNamedItem(addMemberSeekingDialogRef.value, "jeux") as MdChipSet).chips as MdFilterChip[];
-  const seeking = new Set<GameType>();
+  const chips = (findRecursiveNamedItem(addMemberSeekingDialogRef.value, 'jeux') as MdChipSet)
+    .chips as MdFilterChip[]
+  const seeking = new Set<GameType>()
 
   for (const chip of chips) {
-    const chipName = chip.attributes.getNamedItem("name");
+    const chipName = chip.attributes.getNamedItem('name')
     if (chip.selected && chipName !== null) {
       seeking.add(chipName.value as GameType)
     }
   }
 
-  if (seeking.size === 0 || member === null) {
-    return;
+  if (seeking.size === 0) {
+    return
   }
 
   const seekingMember: IMemberSeeking = {
-    member: member,
-    seeking: seeking
+    member: identity.value,
+    seeking: seeking,
   }
 
-  MEMBERS_SEEKING.value.push(seekingMember);
+  MEMBERS_SEEKING.value.push(seekingMember)
 
-  closeDialog(addMemberSeekingDialogRef.value);
-
+  closeDialog(addMemberSeekingDialogRef.value)
 }
-
 </script>
 
 <template>
@@ -104,8 +90,8 @@ function addMemberToSeekingMembers(): void {
         </md-assist-chip>
       </md-chip-set>
     </div>
-    <div class="add-element-box" :aria-label="LABEL_ADD_MEMBER_SEEKING_TABLE" :title="LABEL_ADD_MEMBER_SEEKING_TABLE"
-      @click="() => openDialog(addMemberSeekingDialogRef)">
+    <div v-if="identityInMembersSeeking" class="add-element-box" :aria-label="LABEL_ADD_MEMBER_SEEKING_TABLE"
+      :title="LABEL_ADD_MEMBER_SEEKING_TABLE" @click="() => openDialog(addMemberSeekingDialogRef)">
       <md-icon>add</md-icon>
       <p>Je cherche une table !</p>
     </div>
@@ -113,23 +99,17 @@ function addMemberToSeekingMembers(): void {
 
   <md-dialog ref="addMemberSeekingDialogRef">
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-    <h2 slot="headline" class="dialog-headline">S'inscrire en tant que membre cherchant une table</h2>
+    <h2 slot="headline" class="dialog-headline">Inscription à la recherche de table</h2>
 
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
     <form name="content" slot="content" method="dialog">
+      <p>
+        Inscription en tant que <b>{{ identity?.toString() }}</b>
+      </p>
 
-      <p v-if="identity === null">Qui êtes-vous ?</p>
-      <p v-else><b>Inscription en tant que {{ identity.toString() }}</b></p>
-
-      <span v-if="identity === null" name="identity">
-        <md-outlined-text-field required name="pseudo" label="Pseudo Discord" pattern=".+"
-          placeholder="Pseudo Discord"></md-outlined-text-field>
-        <md-outlined-text-field required name="prenom" label="Prénom" pattern=".+"
-          placeholder="Prénom"></md-outlined-text-field>
-      </span>
       <p>Type de jeu recherché</p>
       <md-chip-set name="jeux">
-        <md-filter-chip v-for="mapIt in ICON_MAP.entries()" :key="mapIt[0]" :label="mapIt[0]" :name=mapIt[0]>
+        <md-filter-chip v-for="mapIt in ICON_MAP.entries()" :key="mapIt[0]" :label="mapIt[0]" :name="mapIt[0]">
           <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
           <md-icon slot="icon">{{ mapIt[1] }}</md-icon>
         </md-filter-chip>
@@ -142,7 +122,6 @@ function addMemberToSeekingMembers(): void {
       <md-text-button @click="addMemberToSeekingMembers">Confirmer l'inscription</md-text-button>
     </div>
   </md-dialog>
-
 </template>
 
 <style scoped></style>

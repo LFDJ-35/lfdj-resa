@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import JDFTable from '@/components/tables/jdf/JDFTable.vue'
 import { formatDateDay } from '@/formatters/date.ts'
-import { Member } from '@/models/member.ts'
 import { JDFTableModel } from '@/models/tables/table_jdf'
-import { identity } from '@/stores/identity.ts'
+import { identified, identity } from '@/stores/identity.ts'
 import { sessionStore } from '@/stores/session.ts'
 import { closeDialog, openDialog } from '@/utils/dialogs.ts'
 import { FieldsValidator, findRecursiveNamedItem } from '@/utils/forms.ts'
@@ -14,20 +13,20 @@ import { computed, ref } from 'vue'
 const dialogRef = ref<MdDialog | null>(null)
 
 const jdfTables = computed(() => sessionStore.current.tables
-.filter((val) => val.type === "Jeu de figurines")
+  .filter((val) => val.type === "Jeu de figurines")
 )
 
 function validateAndAddTable() {
   console.log(dialogRef.value)
 
-  if (dialogRef.value === null) {
+  const author = identity.value
+
+  if (dialogRef.value === null || author === null) {
     return
   }
 
   const formContent = dialogRef.value.children.namedItem('content') as HTMLFormElement
   const title = findRecursiveNamedItem(formContent, 'title') as MdOutlinedTextField
-  const pseudo = findRecursiveNamedItem(formContent, 'pseudo') as MdOutlinedTextField
-  const name = findRecursiveNamedItem(formContent, 'prenom') as MdOutlinedTextField
   const players = findRecursiveNamedItem(formContent, 'players') as MdOutlinedTextField
   const description = findRecursiveNamedItem(formContent, 'description') as MdOutlinedTextField
 
@@ -36,24 +35,13 @@ function validateAndAddTable() {
     .addValidator(players, 'Le nombre de joueurs doit être supérieur à 0')
     .addValidator(description, 'La table doit contenir une description')
 
-  if (identity.value === null) {
-    fieldsValidator
-      .addValidator(pseudo, 'Le pseudonyme du MJ doit au moins contenir un caractère.')
-      .addValidator(name, 'Le prénom du MJ doit au moins contenir un caractère.')
-  }
-
   if (fieldsValidator.validate()) {
-    let author = identity.value;
-    if (identity.value === null) {
-      author = new Member(pseudo.value, name.value);
-    }
-
     const table = new JDFTableModel(
       title.value,
       sessionStore.current.from_date,
       sessionStore.current.to_date,
       description.value,
-      author!,
+      author,
       [],
       players.valueAsNumber,
     )
@@ -67,10 +55,9 @@ function validateAndAddTable() {
 <template>
   <h2>Tables de jeu de figurines du {{ formatDateDay(sessionStore.current.from_date) }}</h2>
   <article class="card-section">
-    <JDFTable
-      v-for="table in jdfTables" :key="table.title" :tableData="table"
+    <JDFTable v-for="table in jdfTables" :key="table.title" :tableData="table"
       @remove="() => sessionStore.current.removeTable(table)" />
-    <div class="add-element-box" @click="() => openDialog(dialogRef)">
+    <div v-if="identified" class="add-element-box" @click="() => openDialog(dialogRef)">
       <md-icon>add</md-icon>
       <p>Ajouter une table de jeu de figurines</p>
     </div>
@@ -82,15 +69,9 @@ function validateAndAddTable() {
 
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
     <form name="content" slot="content" method="dialog">
-      <p v-if="identity !== null">Ajouter une table en tant que {{ identity.toString() }}</p>
+      <p v-if="identity !== null">Ajouter une table en tant que <b>{{ identity.toString() }}</b></p>
       <md-outlined-text-field required label="Titre de la table" name="title" pattern=".+"
         placeholder="Titre de la table"></md-outlined-text-field>
-      <span name="identity" v-if="identity === null">
-        <md-outlined-text-field required name="pseudo" label="Pseudo Discord du MJ" pattern=".+"
-          placeholder="Pseudo Discord du MJ"></md-outlined-text-field>
-        <md-outlined-text-field required name="prenom" label="Prénom du MJ" pattern=".+"
-          placeholder="Prénom du MJ"></md-outlined-text-field>
-      </span>
       <md-outlined-text-field required type="number" name="players" suffix-text="joueurs" label="Nombre de places"
         pattern="\d+" min=1 max=16 value="4"></md-outlined-text-field>
       <md-outlined-text-field required type="textarea" name="description" label="Description de la table" pattern="\d+"

@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import JDRTable from '@/components/tables/jdr/JDRTable.vue'
 import { formatDateDay } from '@/formatters/date.ts'
-import { Member } from '@/models/member.ts'
 import { JDRTableModel } from '@/models/tables/table_jdr.ts'
-import { identity } from '@/stores/identity.ts'
+import { identified, identity } from '@/stores/identity.ts'
 import { sessionStore } from '@/stores/session.ts'
 import { closeDialog, openDialog } from '@/utils/dialogs.ts'
 import { FieldsValidator, findRecursiveNamedItem } from '@/utils/forms.ts'
@@ -14,20 +13,20 @@ import { computed, ref } from 'vue'
 const dialogRef = ref<MdDialog | null>(null)
 
 const jdrTables = computed(() => sessionStore.current.tables
-.filter((val) => val.type === "Jeu de rôle")
+  .filter((val) => val.type === "Jeu de rôle")
 )
 
 function validateAndAddTable() {
   console.log(dialogRef.value)
 
-  if (dialogRef.value === null) {
+  const author = identity.value
+
+  if (dialogRef.value === null || author === null) {
     return
   }
 
   const formContent = dialogRef.value.children.namedItem('content') as HTMLFormElement
   const title = findRecursiveNamedItem(formContent, 'title') as MdOutlinedTextField
-  const pseudo = findRecursiveNamedItem(formContent, 'pseudo') as MdOutlinedTextField
-  const name = findRecursiveNamedItem(formContent, 'prenom') as MdOutlinedTextField
   const players = findRecursiveNamedItem(formContent, 'players') as MdOutlinedTextField
   const description = findRecursiveNamedItem(formContent, 'description') as MdOutlinedTextField
 
@@ -36,24 +35,14 @@ function validateAndAddTable() {
     .addValidator(players, 'Le nombre de joueurs doit être supérieur à 0')
     .addValidator(description, 'La table doit contenir une description')
 
-  if (identity.value === null) {
-    fieldsValidator
-      .addValidator(pseudo, 'Le pseudonyme du MJ doit au moins contenir un caractère.')
-      .addValidator(name, 'Le prénom du MJ doit au moins contenir un caractère.')
-  }
-
   if (fieldsValidator.validate()) {
-    let author = identity.value;
-    if (identity.value === null) {
-      author = new Member(pseudo.value, name.value);
-    }
 
     const table = new JDRTableModel(
       title.value,
       sessionStore.current.from_date,
       sessionStore.current.to_date,
       description.value,
-      author!,
+      author,
       [],
       players.valueAsNumber,
     )
@@ -67,11 +56,9 @@ function validateAndAddTable() {
 <template>
   <h2>Tables de jeu de rôle du {{ formatDateDay(sessionStore.current.from_date) }}</h2>
   <article class="card-section">
-    <JDRTable
-      v-for="table in jdrTables" :key="table.title"
-      :table_data="table"
+    <JDRTable v-for="table in jdrTables" :key="table.title" :table_data="table"
       @remove="sessionStore.current.removeTable(table)" />
-    <div class="add-element-box" @click="() => openDialog(dialogRef)">
+    <div v-if="identified" class="add-element-box" @click="() => openDialog(dialogRef)">
       <md-icon>add</md-icon>
       <p>Ajouter une table de jeu de rôle</p>
     </div>
@@ -83,7 +70,7 @@ function validateAndAddTable() {
 
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
     <form name="content" slot="content" method="dialog">
-      <p v-if="identity !== null">Ajouter une table en tant que {{ identity.toString() }}</p>
+      <p v-if="identity !== null">Ajouter une table en tant que <b>{{ identity.toString() }}</b></p>
       <md-outlined-text-field required label="Titre de la table" name="title" pattern=".+"
         placeholder="Titre de la table"></md-outlined-text-field>
       <span name="identity" v-if="identity === null">
