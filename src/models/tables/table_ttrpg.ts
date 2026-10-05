@@ -1,8 +1,7 @@
 import { Member } from '@/models/member'
-import { TableModel } from '@/models/table_session'
+import { TableModel } from '@/models/tables/table_session'
 
-
-class JDFTableModel extends TableModel {
+class TTRPGTableModel extends TableModel {
 
   constructor(
     title: string,
@@ -14,8 +13,8 @@ class JDFTableModel extends TableModel {
     max_players: number,
   ) {
     super(title, from_date, to_date, description, author, players, max_players)
-    this.type = "Jeu de figurines"
+    this.type = "Jeu de rôle"
   }
 }
 
-export { JDFTableModel }
+export { TTRPGTableModel }

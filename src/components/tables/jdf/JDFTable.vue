@@ -8,7 +8,7 @@ import "@material/web/list/list-item";
 
 import { formatDateHour } from "@/formatters/date.ts";
 import { Member } from "@/models/member.ts";
-import { JDFTableModel } from "@/models/table_jdf.ts";
+import { JDFTableModel } from "@/models/tables/table_jdf";
 import { ref, type PropType } from "vue";
 
 import OnePlayerList from "@/components/OnePlayerList.vue";

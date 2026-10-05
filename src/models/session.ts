@@ -1,4 +1,4 @@
-import { TableModel } from "@/models/table_session";
+import { TableModel } from "@/models/tables/table_session";
 import type { Place } from "@/models/place";
 import { SessionEvent } from "@/models/event";
 

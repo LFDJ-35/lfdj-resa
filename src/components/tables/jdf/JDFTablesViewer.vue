@@ -2,7 +2,7 @@
 import JDFTable from '@/components/tables/jdf/JDFTable.vue'
 import { formatDateDay } from '@/formatters/date.ts'
 import { Member } from '@/models/member.ts'
-import { JDFTableModel } from '@/models/table_jdf'
+import { JDFTableModel } from '@/models/tables/table_jdf'
 import { identity } from '@/stores/identity.ts'
 import { sessionStore } from '@/stores/session.ts'
 import { closeDialog, openDialog } from '@/utils/dialogs.ts'

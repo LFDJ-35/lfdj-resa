@@ -1,5 +1,5 @@
 import { Member } from '@/models/member'
-import { TableModel } from '@/models/table_session'
+import { TableModel } from '@/models/tables/table_session'
 
 
 class JCCTableModel extends TableModel {

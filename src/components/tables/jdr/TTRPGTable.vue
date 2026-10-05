@@ -8,7 +8,7 @@ import "@material/web/list/list-item";
 
 import { formatDateHour } from "@/formatters/date.ts";
 import { Member } from "@/models/member.ts";
-import { TTRPGTableModel } from "@/models/table_ttrpg.ts";
+import { TTRPGTableModel } from "@/models/tables/table_ttrpg";
 import { ref, type PropType } from "vue";
 
 import OnePlayerList from "@/components/OnePlayerList.vue";

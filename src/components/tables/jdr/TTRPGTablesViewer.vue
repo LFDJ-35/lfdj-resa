@@ -2,7 +2,7 @@
 import TTRPGTable from '@/components/tables/jdr/TTRPGTable.vue'
 import { formatDateDay } from '@/formatters/date.ts'
 import { Member } from '@/models/member.ts'
-import { TTRPGTableModel } from '@/models/table_ttrpg.ts'
+import { TTRPGTableModel } from '@/models/tables/table_ttrpg'
 import { identity } from '@/stores/identity.ts'
 import { sessionStore } from '@/stores/session.ts'
 import { closeDialog, openDialog } from '@/utils/dialogs.ts'

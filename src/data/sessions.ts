@@ -1,6 +1,6 @@
 import { LFDJSessionModel } from "@/models/session";
-import { JDFTableModel } from "@/models/table_jdf";
-import { TTRPGTableModel } from "@/models/table_ttrpg";
+import { JDFTableModel } from "@/models/tables/table_jdf";
+import { TTRPGTableModel } from "@/models/tables/table_ttrpg";
 import { FAKE_MEMBERS } from "./members";
 import { BAIS, VITRE } from "./places";
 
