@@ -1,6 +1,7 @@
 import { LFDJSessionModel } from "@/models/session";
+import { JCCTableModel } from "@/models/tables/table_jcc";
 import { JDFTableModel } from "@/models/tables/table_jdf";
-import { TTRPGTableModel } from "@/models/tables/table_ttrpg";
+import { JDRTableModel } from "@/models/tables/table_jdr";
 import { FAKE_MEMBERS } from "./members";
 import { BAIS, VITRE } from "./places";
 
@@ -20,19 +21,24 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 
 const FAKE_SESSIONS: LFDJSessionModel[] = [
   new LFDJSessionModel(DATE_1, VITRE, [
-    new TTRPGTableModel("Alien", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 4),
-    new TTRPGTableModel("7ème Mer", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[1]!, [FAKE_MEMBERS[3]!], 4),
+    new JDRTableModel("Alien", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 4),
+    new JDRTableModel("7ème Mer", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[1]!, [FAKE_MEMBERS[3]!], 4),
     new JDFTableModel("Warhammer 40K", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 4),
     new JDFTableModel("Battlefleet Gothic", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 4),
+    new JCCTableModel("Pokémon", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 2),
+    new JCCTableModel("One Piece", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 2),
   ]),
   new LFDJSessionModel(DATE_2, BAIS, [
-    new TTRPGTableModel("Cyberpunk RED", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 4),
-    new TTRPGTableModel("Cats ! La Mascarade", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[1]!, [FAKE_MEMBERS[3]!], 4),
+    new JDRTableModel("Cyberpunk RED", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 4),
+    new JDRTableModel("Cats ! La Mascarade", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[1]!, [FAKE_MEMBERS[3]!], 4),
     new JDFTableModel("BloodBowl - Ligue 2", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 2),
+    new JCCTableModel("Magic", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 4),
+    new JCCTableModel("Yu-Gi-Oh !", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 4),
+
   ]),
   new LFDJSessionModel(DATE_2, BAIS, [
-    new TTRPGTableModel("Tout le monde est John", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[3]!], 4),
-    new TTRPGTableModel("Agone", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[1]!, [FAKE_MEMBERS[2]!], 4),
+    new JDRTableModel("Tout le monde est John", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[3]!], 4),
+    new JDRTableModel("Agone", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[1]!, [FAKE_MEMBERS[2]!], 4),
     new JDFTableModel("BloodBowl - Ligue 2", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 2),
   ]),
 ]
