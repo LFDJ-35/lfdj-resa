@@ -101,7 +101,7 @@ class CarpoolControl {
     if (removeCarpoolDriverDialogRef.value === null) { return }
 
     if (targetCarpool.value !== null) {
-      const carpoolIdx = CARPOOLS.value.findIndex((val, _idx, _arr) => val.id === targetCarpool.value!.id)
+      const carpoolIdx = CARPOOLS.value.findIndex((val) => val.id === targetCarpool.value!.id)
       if (carpoolIdx !== -1) {
         CARPOOLS.value.splice(carpoolIdx, 1)
       }

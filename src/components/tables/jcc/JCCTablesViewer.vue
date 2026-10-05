@@ -13,7 +13,7 @@ import JCCTable from './JCCTable.vue'
 const dialogRef = ref<MdDialog | null>(null)
 
 const jccTables = computed(() =>
-  sessionStore.current.tables.filter((val) => val.type === 'Jeu de cartes à collectionner'),
+  sessionStore.current.tables.filter((val) => val.type === 'JCC'),
 )
 
 function validateAndAddTable() {

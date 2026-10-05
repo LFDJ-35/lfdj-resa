@@ -46,7 +46,7 @@ function openRemovePlayerDialog(member: Member) {
 }
 
 defineEmits<{
-  (e: 'remove') : void
+  (e: 'remove'): void
 }>()
 
 </script>
@@ -64,7 +64,7 @@ defineEmits<{
       <md-assist-chip aria-label="Nombre de Joueurs à la table" title="Nombre de Joueurs à la table">
         <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
         <md-icon slot="icon">group</md-icon>
-        <span>{{ table.players.length }}/{{ table.max_players }}</span>
+        <span>{{ table.players.length }}/{{ table.maxPlayers }}</span>
       </md-assist-chip>
       <md-assist-chip aria-label="Heures de début et de fin" title="Heures de début et de fin">
         <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
@@ -75,13 +75,9 @@ defineEmits<{
 
     <p>{{ table.description }}</p>
 
-    <OnePlayerList
-      @add="openDialog(addSelfDialogRef?.thisDialog!)"
-      @author-remove="openDialog(removeTableDialogRef?.thisDialog)"
-      @remove="openRemovePlayerDialog"
-      :members="table.players"
-      :author="table.author"
-      :can-add-member="table.canInsertPlayer() && identity !== null">
+    <OnePlayerList @add="openDialog(addSelfDialogRef?.thisDialog!)"
+      @author-remove="openDialog(removeTableDialogRef?.thisDialog)" @remove="openRemovePlayerDialog"
+      :members="table.players" :author="table.author" :can-add-member="table.canInsertPlayer() && identity !== null">
     </OnePlayerList>
 
   </section>
@@ -97,8 +93,8 @@ defineEmits<{
   </YesNoDialog>
 
   <YesNoDialog ref="removeTableDialogRef" title="Suppression de la table"
-    :emphasis="'Confirmer la suppression de la table ' + table.title + ' ?'" accept="Désincrire"
-    refuse="Annuler" @accepted="$emit('remove')">
+    :emphasis="'Confirmer la suppression de la table ' + table.title + ' ?'" accept="Désincrire" refuse="Annuler"
+    @accepted="$emit('remove')">
   </YesNoDialog>
 
 </template>

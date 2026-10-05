@@ -65,7 +65,7 @@ function openRemovePlayerDialog(member: Member) {
       <md-assist-chip aria-label="Nombre de Joueurs à la table" title="Nombre de Joueurs à la table">
         <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
         <md-icon slot="icon">group</md-icon>
-        <span>{{ table.players.length }}/{{ table.max_players }}</span>
+        <span>{{ table.players.length }}/{{ table.maxPlayers }}</span>
       </md-assist-chip>
       <md-assist-chip aria-label="Heures de début et de fin" title="Heures de début et de fin">
         <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
@@ -76,14 +76,10 @@ function openRemovePlayerDialog(member: Member) {
 
     <p>{{ table.description }}</p>
 
-    <OnePlayerList
-    :members="table.players"
-    :can-add-member="table.canInsertPlayer() && identity !== null"
-    :author="table.author"
-    @add="openDialog(addSelfDialogRef?.thisDialog!)"
-    @remove="openRemovePlayerDialog"
-    @author-remove="() => openDialog(removeTableDialogRef?.thisDialog)">
-  </OnePlayerList>
+    <OnePlayerList :members="table.players" :can-add-member="table.canInsertPlayer() && identity !== null"
+      :author="table.author" @add="openDialog(addSelfDialogRef?.thisDialog!)" @remove="openRemovePlayerDialog"
+      @author-remove="() => openDialog(removeTableDialogRef?.thisDialog)">
+    </OnePlayerList>
 
   </section>
 
@@ -97,13 +93,8 @@ function openRemovePlayerDialog(member: Member) {
     refuse="Annuler" @accepted="() => { removePlayer(memberToRemove) }">
   </YesNoDialog>
 
-  <YesNoDialog
-    ref="removeTableDialogRef"
-    title="Suppression de la table"
-    question="Supprimer la table ?"
-    emphasis="Pensez à en informer vos joueurs."
-    accept="Confirmer la suppression"
-    refuse="Annuler"
+  <YesNoDialog ref="removeTableDialogRef" title="Suppression de la table" question="Supprimer la table ?"
+    emphasis="Pensez à en informer vos joueurs." accept="Confirmer la suppression" refuse="Annuler"
     @accepted="$emit('remove')">
   </YesNoDialog>
 

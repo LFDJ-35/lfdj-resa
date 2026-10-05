@@ -13,7 +13,7 @@ import { computed, ref } from 'vue'
 const dialogRef = ref<MdDialog | null>(null)
 
 const jdrTables = computed(() => sessionStore.current.tables
-  .filter((val) => val.type === "Jeu de rôle")
+  .filter((val) => val.type === "JDR")
 )
 
 function validateAndAddTable() {

@@ -13,7 +13,7 @@ class JDRTableModel extends TableModel {
     max_players: number,
   ) {
     super(title, from_date, to_date, description, author, players, max_players)
-    this.type = "Jeu de rôle"
+    this.type = 'JDR'
   }
 }
 

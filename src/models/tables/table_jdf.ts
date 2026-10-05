@@ -14,7 +14,7 @@ class JDFTableModel extends TableModel {
     max_players: number,
   ) {
     super(title, from_date, to_date, description, author, players, max_players, true)
-    this.type = "Jeu de figurines"
+    this.type = 'JDF'
   }
 }
 
