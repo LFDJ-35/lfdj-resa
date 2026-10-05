@@ -1,4 +1,5 @@
 <script setup lang="ts">
+
 import '@material/web/icon/icon'
 
 import { closeDialog, openDialog } from '@/utils/dialogs'
@@ -24,9 +25,7 @@ const targetPassenger = ref<Member | null>(null)
 const targetCarpool = ref<ICarpool | null>(null)
 
 function openRemovePassengerFromCarpoolDialog(carpool: ICarpool, passenger: Member) {
-  if (removeCarpoolPassengerDialogRef.value === null) {
-    return
-  }
+  if (removeCarpoolPassengerDialogRef.value === null) { return }
 
   targetCarpool.value = carpool
   targetPassenger.value = passenger
@@ -35,9 +34,7 @@ function openRemovePassengerFromCarpoolDialog(carpool: ICarpool, passenger: Memb
 }
 
 function openAddPassengerToCarpoolDialog(carpool: ICarpool) {
-  if (addCarpoolPassengerDialogRef.value === null) {
-    return
-  }
+  if (addCarpoolPassengerDialogRef.value === null) { return }
 
   targetCarpool.value = carpool
 
@@ -49,7 +46,7 @@ function openRemoveCarpoolDriverDialog(carpool: ICarpool) {
     return
   }
   targetCarpool.value = carpool
-  openDialog(removeCarpoolDriverDialogRef.value.thisDialog)
+  openDialog(removeCarpoolDriverDialogRef.value.thisDialog);
 }
 
 class CarpoolControl {
@@ -101,17 +98,15 @@ class CarpoolControl {
   }
 
   static removeCarpool(): void {
-    if (removeCarpoolDriverDialogRef.value === null) {
-      return
-    }
+    if (removeCarpoolDriverDialogRef.value === null) { return }
 
     if (targetCarpool.value !== null) {
-      const carpoolIdx = CARPOOLS.value.findIndex((val) => val.id === targetCarpool.value!.id)
+      const carpoolIdx = CARPOOLS.value.findIndex((val, _idx, _arr) => val.id === targetCarpool.value!.id)
       if (carpoolIdx !== -1) {
         CARPOOLS.value.splice(carpoolIdx, 1)
       }
     }
-    targetCarpool.value = null
+    targetCarpool.value = null;
   }
 }
 
@@ -123,9 +118,7 @@ class PassengersControl {
    * Supprime un passager d'un covoiturage
    */
   static removePassengerFromCarpool() {
-    if (targetCarpool.value === null) {
-      return
-    }
+    if (targetCarpool.value === null) { return }
 
     targetCarpool.value.removePassenger(targetPassenger.value)
     targetCarpool.value = null
@@ -133,9 +126,7 @@ class PassengersControl {
   }
 
   static addPassengerToCarpool() {
-    if (targetCarpool.value === null) {
-      return
-    }
+    if (targetCarpool.value === null) { return }
     targetCarpool.value.addPassenger(identity.value)
     targetCarpool.value = null
   }
@@ -144,7 +135,9 @@ class PassengersControl {
 const CARPOOLS = ref(FAKE_CARPOOLS)
 
 function isMemberInCarpools(member: Member): boolean {
-  return CARPOOLS.value.map((pool) => pool.has(member)).some((val) => val === true)
+  return CARPOOLS.value
+    .map((pool) => pool.has(member))
+    .some((val) => val === true)
 }
 
 /**
@@ -155,11 +148,9 @@ function canSubscribeToDrivers(): boolean {
 }
 
 function showAvailablePassengerSlot(carpool: ICarpool): boolean {
-  if (identity.value === null || carpool.canAddPassenger() === false) {
-    return false
-  }
+  if (identity.value === null || carpool.canAddPassenger() === false) { return false }
 
-  return !isMemberInCarpools(identity.value)
+  return !isMemberInCarpools(identity.value);
 }
 </script>
 
@@ -191,24 +182,21 @@ function showAvailablePassengerSlot(carpool: ICarpool): boolean {
           <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
           <div slot="headline">{{ carpool.driver.toString() }}</div>
           <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-          <template v-slot:end>
-            <md-icon v-if="memberIsIdentity(carpool.driver)" class="clickable"
-              @click="openRemoveCarpoolDriverDialog(carpool)">delete</md-icon>
-          </template>
+          <md-icon v-if="memberIsIdentity(carpool.driver)" class="clickable" slot="end"
+            @click="openRemoveCarpoolDriverDialog(carpool)">delete</md-icon>
           <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
           <md-icon v-else slot="end">search_hands_free</md-icon>
+
         </md-list-item>
         <md-list-item v-for="passenger in carpool.passengers" :key="passenger.id">
           <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
           <div slot="headline">{{ passenger.toString() }}</div>
           <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-          <template v-slot:end>
-            <md-icon class="clickable" @click="
-              () => {
-                openRemovePassengerFromCarpoolDialog(carpool, passenger)
-              }
-            ">person_remove</md-icon>
-          </template>
+          <md-icon slot="end" class="clickable" @click="
+            () => {
+              openRemovePassengerFromCarpoolDialog(carpool, passenger)
+            }
+          ">person_remove</md-icon>
         </md-list-item>
 
         <md-list-item v-if="showAvailablePassengerSlot(carpool)" @click="() => openAddPassengerToCarpoolDialog(carpool)"
@@ -273,6 +261,7 @@ function showAvailablePassengerSlot(carpool: ICarpool): boolean {
   <YesNoDialog ref="removeCarpoolDriverDialogRef" title="Supprimer votre covoiturage ?"
     emphasis="Merci de prévenir vos passagers." accept="Confirmer la suppression" refuse="Annuler"
     @accepted="CarpoolControl.removeCarpool"></YesNoDialog>
+
 </template>
 
 <style scoped>

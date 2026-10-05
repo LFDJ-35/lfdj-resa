@@ -1,92 +1,73 @@
 <script setup lang="ts">
-import '@material/web/chips/chip-set'
-import '@material/web/chips/filter-chip'
-import '@material/web/fab/fab'
-import '@material/web/icon/icon'
-import '@material/web/tabs/primary-tab'
-import '@material/web/tabs/tabs'
+import "@material/web/chips/chip-set";
+import "@material/web/chips/filter-chip";
+import "@material/web/fab/fab";
+import "@material/web/icon/icon";
+import "@material/web/tabs/primary-tab";
+import "@material/web/tabs/tabs";
 
-import { ref } from 'vue'
+import { ref } from "vue";
 
-import AccountLogin from '@/components/AccountLogin.vue'
-import CarpoolBooking from '@/components/CarpoolBooking.vue'
-import FilterChips from '@/components/FilterChips.vue'
-import MembersSeeking from '@/components/MembersSeeking.vue'
-import JDFTablesViewer from '@/components/tables/jdf/JDFTablesViewer.vue'
-import JDRTablesViewer from '@/components/tables/jdr/JDRTablesViewer.vue'
-import { FAKE_SESSIONS } from '@/data/sessions.ts'
-import { formatDateDay } from '@/formatters/date.ts'
-import type { FilterChipModel } from '@/models/filter_chip.ts'
-import type { LFDJSessionModel } from '@/models/session.ts'
-import { filterStore } from '@/stores/filters.ts'
-import { sessionStore } from '@/stores/session.ts'
-import { MdTabs } from '@material/web/tabs/tabs'
-import JCCTablesViewer from './components/tables/jcc/JCCTablesViewer.vue'
+import AccountLogin from "@/components/AccountLogin.vue";
+import CarpoolBooking from "@/components/CarpoolBooking.vue";
+import FilterChips from "@/components/FilterChips.vue";
+import MembersSeeking from "@/components/MembersSeeking.vue";
+import JDFTablesViewer from "@/components/tables/jdf/JDFTablesViewer.vue";
+import JDRTablesViewer from '@/components/tables/jdr/JDRTablesViewer.vue';
+import { FAKE_SESSIONS } from "@/data/sessions.ts";
+import { formatDateDay } from "@/formatters/date.ts";
+import type { FilterChipModel } from "@/models/filter_chip.ts";
+import type { LFDJSessionModel } from "@/models/session.ts";
+import { filterStore } from "@/stores/filters.ts";
+import { sessionStore } from "@/stores/session.ts";
+import { MdTabs } from "@material/web/tabs/tabs";
+import JCCTablesViewer from "./components/tables/jcc/JCCTablesViewer.vue";
 
 // Membres en quête de jeu
-const FILTER_ID_REC = 'rec'
+const FILTER_ID_REC = "rec";
 // Membres en quête de covoiturage
-const FILTER_ID_COV = 'cov'
+const FILTER_ID_COV = "cov";
 // Tables de JDR
-const FILTER_ID_JDR = 'jdr'
+const FILTER_ID_JDR = "jdr";
 // Tables de JCC
-const FILTER_ID_JCC = 'jcc'
+const FILTER_ID_JCC = "jcc";
 // Tables de JDF
-const FILTER_ID_JDF = 'jdf'
+const FILTER_ID_JDF = "jdf";
+
 
 const FILTER_CHIPS: FilterChipModel[] = [
-  {
-    id: FILTER_ID_REC,
-    label: 'Activer la vue Membres en recherche de jeux',
-    icon: 'person_alert',
-    text: 'Membres en recherche de jeu',
-  },
-  {
-    id: FILTER_ID_COV,
-    label: 'Activer la vue covoiturage',
-    icon: 'local_taxi',
-    text: 'Covoiturage',
-  },
-  { id: FILTER_ID_JDR, label: 'Activer la vue Jeu de rôle', icon: 'ifl', text: 'Jeu de rôle' },
-  {
-    id: FILTER_ID_JCC,
-    label: 'Activer la vue Jeu de cartes à collectionner',
-    icon: 'playing_cards',
-    text: 'Jeu de cartes à collectionner',
-  },
-  {
-    id: FILTER_ID_JDF,
-    label: 'Activer la vue Jeu de figurines',
-    icon: 'chess_pawn',
-    text: 'Jeu de figurines',
-  },
+  { id: FILTER_ID_REC, label: "Activer la vue Membres en recherche de jeux", icon: "person_alert", text: "Membres en recherche de jeu" },
+  { id: FILTER_ID_COV, label: "Activer la vue covoiturage", icon: "local_taxi", text: "Covoiturage" },
+  { id: FILTER_ID_JDR, label: "Activer la vue Jeu de rôle", icon: "ifl", text: "Jeu de rôle" },
+  { id: FILTER_ID_JCC, label: "Activer la vue Jeu de cartes à collectionner", icon: "playing_cards", text: "Jeu de cartes à collectionner" },
+  { id: FILTER_ID_JDF, label: "Activer la vue Jeu de figurines", icon: "chess_pawn", text: "Jeu de figurines" },
 ]
 
-const currentTabIndex = ref(0)
+const currentTabIndex = ref(0);
 
 function switch_active_session(event: Event) {
+
   if (event.target === undefined || event.target === null) {
     return
-  }
+  };
 
   currentTabIndex.value = (event.target as MdTabs).activeTabIndex
-  sessionStore.current = FAKE_SESSIONS[currentTabIndex.value] as LFDJSessionModel
+  sessionStore.current = FAKE_SESSIONS[currentTabIndex.value] as LFDJSessionModel;
 }
 </script>
 
 <template>
+
   <h1>La Forge des Joueurs - Planificateur de tables</h1>
 
   <nav>
     <md-tabs @change="switch_active_session">
-      <md-primary-tab
-        v-for="(session, index) in FAKE_SESSIONS"
-        :key="session.from_date"
-        :class="{ active: index === 0 }"
-        >{{ formatDateDay(session.from_date) }}
+      <md-primary-tab v-for="(session, index) in FAKE_SESSIONS" :key="session.from_date"
+        :class="{ 'active': index === 0 }">{{
+          formatDateDay(session.from_date) }}
       </md-primary-tab>
     </md-tabs>
-    <FilterChips id="filter-chips" :chips="FILTER_CHIPS"></FilterChips>
+    <FilterChips id="filter-chips" :chips=FILTER_CHIPS></FilterChips>
     <md-divider></md-divider>
   </nav>
 
@@ -99,9 +80,10 @@ function switch_active_session(event: Event) {
   <AccountLogin />
 </template>
 
+
 <style>
 * {
-  font-family: 'Open Sans';
+  font-family: "Open Sans";
 }
 
 :root {
@@ -122,7 +104,7 @@ function switch_active_session(event: Event) {
 
 md-icon,
 md-icon-button {
-  font-family: 'Material Symbols Outlined';
+  font-family: "Material Symbols Outlined";
 }
 
 .add-element-box {
@@ -147,9 +129,7 @@ md-icon-button {
 .card {
   border-radius: var(--md-sys-shape-corner-small);
   border: 1px rgba(0, 0, 0, 0.2) solid;
-  box-shadow:
-    rgba(0, 0, 0, 0.25) 0px 14px 28px,
-    rgba(0, 0, 0, 0.22) 0px 10px 10px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
   padding: 1em;
   max-width: 20em;
 }
@@ -174,13 +154,13 @@ h2 {
 
 .shadow {
   /* https://getcssscan.com/css-box-shadow-examples */
-  box-shadow:
-    rgba(0, 0, 0, 0.25) 0px 14px 28px,
-    rgba(0, 0, 0, 0.22) 0px 10px 10px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
 }
+
 
 /* Sur un affichage mobile*/
 @media (max-width: 800px) {
+
   .add-element-box {
     display: flex;
     flex-direction: column;

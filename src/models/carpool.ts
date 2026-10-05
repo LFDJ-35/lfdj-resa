@@ -31,7 +31,7 @@ class Carpool implements ICarpool {
     when: CarpoolWhen,
     passengers: Member[],
     maxPassengers: number,
-    id: string | null = null,
+    id: string | null = null
   ) {
     this.id = identifier(id)
     this.driver = driver

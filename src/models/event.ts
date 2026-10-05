@@ -1,14 +1,14 @@
-import { identifier } from '@/models/identifier'
+import { identifier } from "@/models/identifier";
 
 /**
  * Représente une session de jeu
  */
 class SessionEvent {
-  title: string
-  from_date: Date
-  to_date: Date
-  description: string
-  id: string
+  title: string;
+  from_date: Date;
+  to_date: Date;
+  description: string;
+  id: string;
 
   /**
    * Constructeur d'une session de jeu
@@ -17,19 +17,13 @@ class SessionEvent {
    * @param to_date Date de fin de l'évènement
    * @param description Description de l'évènement
    */
-  constructor(
-    title: string,
-    from_date: Date,
-    to_date: Date,
-    description: string,
-    id: string | undefined = undefined,
-  ) {
-    this.id = identifier(id)
-    this.title = title
-    this.from_date = from_date
-    this.to_date = to_date
-    this.description = description
+  constructor(title: string, from_date: Date, to_date: Date, description: string, id: string | undefined = undefined) {
+    this.id = identifier(id);
+    this.title = title;
+    this.from_date = from_date;
+    this.to_date = to_date;
+    this.description = description;
   }
 }
 
-export { SessionEvent }
+export { SessionEvent };

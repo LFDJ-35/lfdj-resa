@@ -12,8 +12,8 @@ import { computed, ref } from 'vue'
 
 const dialogRef = ref<MdDialog | null>(null)
 
-const jdrTables = computed(() =>
-  sessionStore.current.tables.filter((val) => val.type === 'Jeu de rôle'),
+const jdrTables = computed(() => sessionStore.current.tables
+  .filter((val) => val.type === "Jeu de rôle")
 )
 
 function validateAndAddTable() {
@@ -36,6 +36,7 @@ function validateAndAddTable() {
     .addValidator(description, 'La table doit contenir une description')
 
   if (fieldsValidator.validate()) {
+
     const table = new JDRTableModel(
       title.value,
       sessionStore.current.from_date,
@@ -55,12 +56,8 @@ function validateAndAddTable() {
 <template>
   <h2>Tables de jeu de rôle du {{ formatDateDay(sessionStore.current.from_date) }}</h2>
   <article class="card-section">
-    <JDRTable
-      v-for="table in jdrTables"
-      :key="table.title"
-      :table_data="table"
-      @remove="sessionStore.current.removeTable(table)"
-    />
+    <JDRTable v-for="table in jdrTables" :key="table.title" :table_data="table"
+      @remove="sessionStore.current.removeTable(table)" />
     <div v-if="identified" class="add-element-box" @click="() => openDialog(dialogRef)">
       <md-icon>add</md-icon>
       <p>Ajouter une table de jeu de rôle</p>
@@ -73,51 +70,19 @@ function validateAndAddTable() {
 
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
     <form name="content" slot="content" method="dialog">
-      <p v-if="identity !== null">
-        Ajouter une table en tant que <b>{{ identity.toString() }}</b>
-      </p>
-      <md-outlined-text-field
-        required
-        label="Titre de la table"
-        name="title"
-        pattern=".+"
-        placeholder="Titre de la table"
-      ></md-outlined-text-field>
+      <p v-if="identity !== null">Ajouter une table en tant que <b>{{ identity.toString() }}</b></p>
+      <md-outlined-text-field required label="Titre de la table" name="title" pattern=".+"
+        placeholder="Titre de la table"></md-outlined-text-field>
       <span name="identity" v-if="identity === null">
-        <md-outlined-text-field
-          required
-          name="pseudo"
-          label="Pseudo Discord du MJ"
-          pattern=".+"
-          placeholder="Pseudo Discord du MJ"
-        ></md-outlined-text-field>
-        <md-outlined-text-field
-          required
-          name="prenom"
-          label="Prénom du MJ"
-          pattern=".+"
-          placeholder="Prénom du MJ"
-        ></md-outlined-text-field>
+        <md-outlined-text-field required name="pseudo" label="Pseudo Discord du MJ" pattern=".+"
+          placeholder="Pseudo Discord du MJ"></md-outlined-text-field>
+        <md-outlined-text-field required name="prenom" label="Prénom du MJ" pattern=".+"
+          placeholder="Prénom du MJ"></md-outlined-text-field>
       </span>
-      <md-outlined-text-field
-        required
-        type="number"
-        name="players"
-        suffix-text="joueurs"
-        label="Nombre de places"
-        pattern="\d+"
-        min="1"
-        max="16"
-        value="4"
-      ></md-outlined-text-field>
-      <md-outlined-text-field
-        required
-        type="textarea"
-        name="description"
-        label="Description de la table"
-        pattern="\d+"
-        placeholder="Description de la table"
-      ></md-outlined-text-field>
+      <md-outlined-text-field required type="number" name="players" suffix-text="joueurs" label="Nombre de places"
+        pattern="\d+" min=1 max=16 value="4"></md-outlined-text-field>
+      <md-outlined-text-field required type="textarea" name="description" label="Description de la table" pattern="\d+"
+        placeholder="Description de la table"></md-outlined-text-field>
     </form>
 
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->

@@ -1,56 +1,54 @@
 <script setup lang="ts">
-import '@material/web/chips/assist-chip'
-import '@material/web/dialog/dialog'
-import '@material/web/icon/icon'
-import '@material/web/list/list'
-import '@material/web/list/list-item'
 
-import { formatDateHour } from '@/formatters/date.ts'
-import { Member } from '@/models/member.ts'
-import { JDRTableModel } from '@/models/tables/table_jdr'
-import { ref, type PropType } from 'vue'
+import "@material/web/chips/assist-chip";
+import "@material/web/dialog/dialog";
+import "@material/web/icon/icon";
+import "@material/web/list/list";
+import "@material/web/list/list-item";
 
-import OnePlayerList from '@/components/OnePlayerList.vue'
-import YesNoDialog from '@/components/dialogs/YesNoDialog.vue'
-import { identity } from '@/stores/identity.ts'
-import { openDialog, type YesNoDialogRef } from '@/utils/dialogs.ts'
+import { formatDateHour } from "@/formatters/date.ts";
+import { Member } from "@/models/member.ts";
+import { JDRTableModel } from "@/models/tables/table_jdr";
+import { ref, type PropType } from "vue";
+
+import OnePlayerList from "@/components/OnePlayerList.vue";
+import YesNoDialog from "@/components/dialogs/YesNoDialog.vue";
+import { identity } from "@/stores/identity.ts";
+import { openDialog, type YesNoDialogRef } from "@/utils/dialogs.ts";
 
 const props = defineProps({
-  table_data: { type: Object as PropType<JDRTableModel>, required: true },
-})
+  table_data: { type: Object as PropType<JDRTableModel>, required: true }
+});
 
-const table = ref(props.table_data)
+const table = ref(props.table_data);
 
-const addSelfDialogRef = ref<YesNoDialogRef | null>(null)
-const removeMemberDialogRef = ref<YesNoDialogRef | null>(null)
-const removeTableDialogRef = ref<YesNoDialogRef | null>(null)
+const addSelfDialogRef = ref<YesNoDialogRef | null>(null);
+const removeMemberDialogRef = ref<YesNoDialogRef | null>(null);
+const removeTableDialogRef = ref<YesNoDialogRef | null>(null);
 
-const memberToRemove = ref<Member | null>(null)
+const memberToRemove = ref<Member | null>(null);
 
 function addPlayerWithIdentity() {
   if (identity.value !== null) {
-    table.value.addPlayer(identity.value)
+    table.value.addPlayer(identity.value);
   }
 }
 
 function removePlayer(member: Member | null): boolean {
-  if (member === null) {
-    return false
-  }
-  return table.value.removePlayer(member)
+  if (member === null) { return false };
+  return table.value.removePlayer(member);
 }
 
 function openRemovePlayerDialog(member: Member) {
-  if (removeMemberDialogRef.value === null) {
-    return
-  }
-  memberToRemove.value = member
-  openDialog(removeMemberDialogRef.value.thisDialog)
+  if (removeMemberDialogRef.value === null) { return }
+  memberToRemove.value = member;
+  openDialog(removeMemberDialogRef.value.thisDialog);
 }
 
 defineEmits<{
-  (e: 'remove'): void
+  (e: 'remove') : void
 }>()
+
 </script>
 
 <template>
@@ -63,10 +61,7 @@ defineEmits<{
         <md-icon slot="icon">person</md-icon>
         {{ table.author.toString() }}
       </md-assist-chip>
-      <md-assist-chip
-        aria-label="Nombre de Joueurs à la table"
-        title="Nombre de Joueurs à la table"
-      >
+      <md-assist-chip aria-label="Nombre de Joueurs à la table" title="Nombre de Joueurs à la table">
         <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
         <md-icon slot="icon">group</md-icon>
         <span>{{ table.players.length }}/{{ table.max_players }}</span>
@@ -86,45 +81,26 @@ defineEmits<{
       @remove="openRemovePlayerDialog"
       :members="table.players"
       :author="table.author"
-      :can-add-member="table.canInsertPlayer() && identity !== null"
-    >
+      :can-add-member="table.canInsertPlayer() && identity !== null">
     </OnePlayerList>
+
   </section>
 
-  <YesNoDialog
-    ref="addSelfDialogRef"
-    v-if="identity !== null"
-    :title="'S\'inscrire à la table [' + table.title + ']'"
-    accept="S'inscrire"
-    refuse="Annuler l'inscription"
-    :emphasis="'Vous serez inscrit en tant que ' + identity.toString()"
-    @accepted="addPlayerWithIdentity"
-  >
+  <YesNoDialog ref="addSelfDialogRef" v-if="identity !== null" :title="'S\'inscrire à la table [' + table.title + ']'"
+    accept="S'inscrire" refuse="Annuler l'inscription"
+    :emphasis="'Vous serez inscrit en tant que ' + identity.toString()" @accepted="addPlayerWithIdentity">
   </YesNoDialog>
 
-  <YesNoDialog
-    ref="removeMemberDialogRef"
-    title="Désinscription"
-    :emphasis="'Confirmer la désinscription de ' + memberToRemove?.toString() + ' ?'"
-    accept="Désincrire"
-    refuse="Annuler"
-    @accepted="
-      () => {
-        removePlayer(memberToRemove)
-      }
-    "
-  >
+  <YesNoDialog ref="removeMemberDialogRef" title="Désinscription"
+    :emphasis="'Confirmer la désinscription de ' + memberToRemove?.toString() + ' ?'" accept="Désincrire"
+    refuse="Annuler" @accepted="() => { removePlayer(memberToRemove) }">
   </YesNoDialog>
 
-  <YesNoDialog
-    ref="removeTableDialogRef"
-    title="Suppression de la table"
-    :emphasis="'Confirmer la suppression de la table ' + table.title + ' ?'"
-    accept="Désincrire"
-    refuse="Annuler"
-    @accepted="$emit('remove')"
-  >
+  <YesNoDialog ref="removeTableDialogRef" title="Suppression de la table"
+    :emphasis="'Confirmer la suppression de la table ' + table.title + ' ?'" accept="Désincrire"
+    refuse="Annuler" @accepted="$emit('remove')">
   </YesNoDialog>
+
 </template>
 
 <style scoped>

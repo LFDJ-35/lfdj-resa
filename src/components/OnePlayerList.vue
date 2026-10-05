@@ -19,7 +19,7 @@ const emit = defineEmits<{
 const props = defineProps({
   members: { type: Object as PropType<Member[]>, required: true },
   canAddMember: Boolean,
-  author: { type: Object as PropType<Member> },
+  author: { type : Object as PropType<Member> },
 })
 </script>
 
@@ -38,19 +38,12 @@ const props = defineProps({
         <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
         <div slot="headline">{{ member.toString() }}</div>
         <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
-        <md-icon class="clickable" slot="end" @click="$emit('remove', member)"
-          >person_remove</md-icon
-        >
+        <md-icon class="clickable" slot="end" @click="$emit('remove', member)">person_remove</md-icon>
       </md-list-item>
     </template>
 
-    <md-list-item
-      v-if="props.canAddMember"
-      @click="$emit('add')"
-      class="clickable"
-      title="Cliquez pour inscrire un joueur"
-      aria-label="Inscrire un joueur"
-    >
+    <md-list-item v-if="props.canAddMember" @click="$emit('add')" class="clickable"
+      title="Cliquez pour inscrire un joueur" aria-label="Inscrire un joueur">
       <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
       <div slot="headline">Disponible</div>
       <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->

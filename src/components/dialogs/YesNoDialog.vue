@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { closeDialog } from '@/utils/dialogs'
-import type { MdDialog } from '@material/web/all'
-import { ref } from 'vue'
+import { closeDialog } from '@/utils/dialogs';
+import type { MdDialog } from '@material/web/all';
+import { ref } from 'vue';
 
 const props = defineProps({
   title: { type: String, required: true },
@@ -20,6 +20,7 @@ const emit = defineEmits<{
 const thisDialog = ref<MdDialog | null>(null)
 
 defineExpose({ thisDialog })
+
 </script>
 
 <template>
@@ -28,35 +29,17 @@ defineExpose({ thisDialog })
     <h2 slot="headline" class="dialog-headline">{{ props.title }}</h2>
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
     <form name="content" slot="content" method="dialog">
-      <p v-if="props.emphasis !== null">
-        <b>{{ props.emphasis }}</b>
-      </p>
-      <p v-if="props.question !== null">
-        <b>{{ props.question }}</b>
-      </p>
+      <p v-if="props.emphasis !== null"><b>{{ props.emphasis }}</b></p>
+      <p v-if="props.question !== null"><b>{{ props.question }}</b></p>
     </form>
 
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
     <div slot="actions">
-      <md-text-button
-        @click="
-          () => {
-            closeDialog(thisDialog)
-            $emit('refused')
-          }
-        "
-        >{{ refuse }}</md-text-button
-      >
-      <md-text-button
-        @click="
-          () => {
-            closeDialog(thisDialog)
-            $emit('accepted')
-          }
-        "
-        >{{ accept }}</md-text-button
-      >
+      <md-text-button @click="() => { closeDialog(thisDialog); $emit('refused'); }">{{ refuse }}</md-text-button>
+      <md-text-button @click="() => { closeDialog(thisDialog); $emit('accepted'); }">{{ accept }}</md-text-button>
     </div>
+
+
   </md-dialog>
 </template>
 

@@ -1,5 +1,8 @@
-import { reactive } from 'vue'
+import { reactive } from "vue"
 
-export const filterStore = reactive({
-  hide: new Set(),
-})
+
+export const filterStore = reactive(
+  {
+    hide: new Set()
+  }
+)
