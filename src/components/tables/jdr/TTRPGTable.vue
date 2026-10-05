@@ -7,15 +7,14 @@ import "@material/web/list/list";
 import "@material/web/list/list-item";
 
 import { ref, type PropType } from "vue";
-import { formatDateHour } from "../formatters/date";
-import { Member } from "../models/member";
-import { TTRPGTableModel } from "../models/table_ttrpg";
+import { formatDateHour } from "../../../formatters/date.ts";
+import { Member } from "../../../models/member.ts";
+import { TTRPGTableModel } from "../../../models/table_ttrpg.ts";
 
-import { identity } from "../stores/identity";
-import { openDialog } from "../utils/dialogs";
-import OnePlayerList from "./OnePlayerList.vue";
-import YesNoDialog from "./dialogs/YesNoDialog.vue";
-import { type YesNoDialogRef } from "../utils/dialogs";
+import OnePlayerList from "@/components/OnePlayerList.vue";
+import YesNoDialog from "@/components/dialogs/YesNoDialog.vue";
+import { identity } from "../../../stores/identity.ts";
+import { openDialog, type YesNoDialogRef } from "../../../utils/dialogs.ts";
 
 const props = defineProps({
   table_data: { type: Object as PropType<TTRPGTableModel>, required: true }

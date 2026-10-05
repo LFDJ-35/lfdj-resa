@@ -1,15 +1,15 @@
 <script setup lang="ts">
+import TTRPGTable from '@/components/tables/jdr/TTRPGTable.vue'
+import { formatDateDay } from '@/formatters/date.ts'
+import { Member } from '@/models/member.ts'
+import { TTRPGTableModel } from '@/models/table_ttrpg.ts'
+import { identity } from '@/stores/identity.ts'
+import { sessionStore } from '@/stores/session.ts'
+import { closeDialog, openDialog } from '@/utils/dialogs.ts'
+import { FieldsValidator, findRecursiveNamedItem } from '@/utils/forms.ts'
 import { MdDialog, MdOutlinedTextField } from '@material/web/all'
 import '@material/web/tabs/tabs'
 import { computed, ref } from 'vue'
-import { formatDateDay } from './formatters/date.ts'
-import { Member } from './models/member.ts'
-import { TTRPGTableModel } from './models/table_ttrpg.ts'
-import { sessionStore } from './stores/session.ts'
-import TTRPGTable from './components/TTRPGTable.vue'
-import { closeDialog, openDialog } from './utils/dialogs.ts'
-import { FieldsValidator, findRecursiveNamedItem } from './utils/forms.ts'
-import { identity } from './stores/identity.ts'
 
 const dialogRef = ref<MdDialog | null>(null)
 
