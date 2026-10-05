@@ -21,6 +21,7 @@ import type { LFDJSessionModel } from "@/models/session.ts";
 import { filterStore } from "@/stores/filters.ts";
 import { sessionStore } from "@/stores/session.ts";
 import { MdTabs } from "@material/web/tabs/tabs";
+import JCCTablesViewer from "./components/tables/jcc/JCCTablesViewer.vue";
 
 // Membres en quête de jeu
 const FILTER_ID_REC = "rec";
@@ -74,7 +75,7 @@ function switch_active_session(event: Event) {
   <CarpoolBooking v-if="!filterStore.hide.has(FILTER_ID_COV)" />
   <TTRPGTablesViewer v-if="!filterStore.hide.has(FILTER_ID_JDR)" />
   <JDFTablesViewer v-if="!filterStore.hide.has(FILTER_ID_JDF)" />
-  <div v-if="!filterStore.hide.has(FILTER_ID_JCC)">Placeholder JCC</div>
+  <JCCTablesViewer v-if="!filterStore.hide.has(FILTER_ID_JCC)" />
 
   <AccountLogin />
 </template>
