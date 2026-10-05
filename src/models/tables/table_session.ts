@@ -8,6 +8,7 @@ class TableModel extends SessionEvent {
   author: Member
   players: Member[]
   type: TableType = null
+  authorIsAPlayer: boolean = false
 
   constructor(
     title: string,
@@ -17,11 +18,17 @@ class TableModel extends SessionEvent {
     author: Member,
     players: Member[],
     max_players: number,
+    authorIsAPlayer: boolean = false
   ) {
     super(title, from_date, to_date, description)
     this.author = author
     this.max_players = max_players
     this.players = players
+
+    if(authorIsAPlayer)
+    {
+      this.max_players -= 1;
+    }
   }
 
   addPlayer(member: Member): boolean {

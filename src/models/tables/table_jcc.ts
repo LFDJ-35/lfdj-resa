@@ -13,7 +13,7 @@ class JCCTableModel extends TableModel {
     players: Member[],
     max_players: number,
   ) {
-    super(title, from_date, to_date, description, author, players, max_players)
+    super(title, from_date, to_date, description, author, players, max_players, true)
     this.type = "Jeu de cartes à collectionner"
   }
 }
