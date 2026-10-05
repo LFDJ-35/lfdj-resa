@@ -1,7 +1,7 @@
 import { Member } from '@/models/member'
 import { TableModel } from '@/models/tables/table_session'
 
-class TTRPGTableModel extends TableModel {
+class JDRTableModel extends TableModel {
 
   constructor(
     title: string,
@@ -17,4 +17,4 @@ class TTRPGTableModel extends TableModel {
   }
 }
 
-export { TTRPGTableModel }
+export { JDRTableModel }

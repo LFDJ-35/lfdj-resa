@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import TTRPGTable from '@/components/tables/jdr/TTRPGTable.vue'
+import JDRTable from '@/components/tables/jdr/JDRTable.vue'
 import { formatDateDay } from '@/formatters/date.ts'
 import { Member } from '@/models/member.ts'
-import { TTRPGTableModel } from '@/models/tables/table_ttrpg'
+import { JDRTableModel } from '@/models/tables/table_jdr.ts'
 import { identity } from '@/stores/identity.ts'
 import { sessionStore } from '@/stores/session.ts'
 import { closeDialog, openDialog } from '@/utils/dialogs.ts'
@@ -48,7 +48,7 @@ function validateAndAddTable() {
       author = new Member(pseudo.value, name.value);
     }
 
-    const table = new TTRPGTableModel(
+    const table = new JDRTableModel(
       title.value,
       sessionStore.current.from_date,
       sessionStore.current.to_date,
@@ -67,7 +67,7 @@ function validateAndAddTable() {
 <template>
   <h2>Tables de jeu de rôle du {{ formatDateDay(sessionStore.current.from_date) }}</h2>
   <article class="card-section">
-    <TTRPGTable
+    <JDRTable
       v-for="table in jdrTables" :key="table.title"
       :table_data="table"
       @remove="sessionStore.current.removeTable(table)" />

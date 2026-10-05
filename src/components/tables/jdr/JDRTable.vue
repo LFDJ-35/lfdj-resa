@@ -8,7 +8,7 @@ import "@material/web/list/list-item";
 
 import { formatDateHour } from "@/formatters/date.ts";
 import { Member } from "@/models/member.ts";
-import { TTRPGTableModel } from "@/models/tables/table_ttrpg";
+import { JDRTableModel } from "@/models/tables/table_jdr";
 import { ref, type PropType } from "vue";
 
 import OnePlayerList from "@/components/OnePlayerList.vue";
@@ -17,7 +17,7 @@ import { identity } from "@/stores/identity.ts";
 import { openDialog, type YesNoDialogRef } from "@/utils/dialogs.ts";
 
 const props = defineProps({
-  table_data: { type: Object as PropType<TTRPGTableModel>, required: true }
+  table_data: { type: Object as PropType<JDRTableModel>, required: true }
 });
 
 const table = ref(props.table_data);

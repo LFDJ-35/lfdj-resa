@@ -13,7 +13,7 @@ import CarpoolBooking from "@/components/CarpoolBooking.vue";
 import FilterChips from "@/components/FilterChips.vue";
 import MembersSeeking from "@/components/MembersSeeking.vue";
 import JDFTablesViewer from "@/components/tables/jdf/JDFTablesViewer.vue";
-import TTRPGTablesViewer from '@/components/tables/jdr/TTRPGTablesViewer.vue';
+import JDRTablesViewer from '@/components/tables/jdr/JDRTablesViewer.vue';
 import { FAKE_SESSIONS } from "@/data/sessions.ts";
 import { formatDateDay } from "@/formatters/date.ts";
 import type { FilterChipModel } from "@/models/filter_chip.ts";
@@ -73,7 +73,7 @@ function switch_active_session(event: Event) {
 
   <MembersSeeking v-if="!filterStore.hide.has(FILTER_ID_REC)" />
   <CarpoolBooking v-if="!filterStore.hide.has(FILTER_ID_COV)" />
-  <TTRPGTablesViewer v-if="!filterStore.hide.has(FILTER_ID_JDR)" />
+  <JDRTablesViewer v-if="!filterStore.hide.has(FILTER_ID_JDR)" />
   <JDFTablesViewer v-if="!filterStore.hide.has(FILTER_ID_JDF)" />
   <JCCTablesViewer v-if="!filterStore.hide.has(FILTER_ID_JCC)" />
 
