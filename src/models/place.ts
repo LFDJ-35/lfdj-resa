@@ -1,11 +1,9 @@
-class Place
-{
-    name : string;
+class Place {
+  name: string
 
-    constructor(name: string)
-    {
-        this.name = name;
-    }
+  constructor(name: string) {
+    this.name = name
+  }
 }
 
-export {Place};
+export { Place }

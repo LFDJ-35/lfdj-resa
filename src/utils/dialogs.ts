@@ -1,9 +1,9 @@
-import { MdDialog } from "@material/web/all";
+import { MdDialog } from '@material/web/all'
 
 function openDialog(dialog: MdDialog | undefined | null) {
-  if (dialog === null || dialog === undefined) return;
+  if (dialog === null || dialog === undefined) return
 
-  dialog.show();
+  dialog.show()
 }
 
 function closeDialog(dialog: MdDialog | null) {

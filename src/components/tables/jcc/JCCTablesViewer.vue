@@ -57,8 +57,12 @@ function validateAndAddTable() {
     Tables de jeu de cartes à collectionner du {{ formatDateDay(sessionStore.current.from_date) }}
   </h2>
   <article class="card-section">
-    <JCCTable v-for="table in jccTables" :key="table.title" :tableData="table"
-      @remove="() => sessionStore.current.removeTable(table)" />
+    <JCCTable
+      v-for="table in jccTables"
+      :key="table.title"
+      :tableData="table"
+      @remove="() => sessionStore.current.removeTable(table)"
+    />
     <div v-if="identified" class="add-element-box" @click="() => openDialog(dialogRef)">
       <md-icon>add</md-icon>
       <p>Ajouter une table de jeu de cartes à collectionner</p>
@@ -74,12 +78,32 @@ function validateAndAddTable() {
       <p>
         Ajouter une table en tant que <b>{{ identity?.toString() }}</b>
       </p>
-      <md-outlined-text-field required label="Titre de la table" name="title" pattern=".+"
-        placeholder="Titre de la table"></md-outlined-text-field>
-      <md-outlined-text-field required type="number" name="players" suffix-text="joueurs" label="Nombre de places"
-        pattern="\d+" min="1" max="16" value="4"></md-outlined-text-field>
-      <md-outlined-text-field required type="textarea" name="description" label="Description de la table" pattern="\d+"
-        placeholder="Description de la table"></md-outlined-text-field>
+      <md-outlined-text-field
+        required
+        label="Titre de la table"
+        name="title"
+        pattern=".+"
+        placeholder="Titre de la table"
+      ></md-outlined-text-field>
+      <md-outlined-text-field
+        required
+        type="number"
+        name="players"
+        suffix-text="joueurs"
+        label="Nombre de places"
+        pattern="\d+"
+        min="1"
+        max="16"
+        value="4"
+      ></md-outlined-text-field>
+      <md-outlined-text-field
+        required
+        type="textarea"
+        name="description"
+        label="Description de la table"
+        pattern="\d+"
+        placeholder="Description de la table"
+      ></md-outlined-text-field>
     </form>
 
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->

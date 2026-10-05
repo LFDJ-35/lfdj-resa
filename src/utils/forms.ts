@@ -71,7 +71,7 @@ type textFieldValidationFunction = (field: TextField, errorMsg: string) => boole
 class FieldsValidator {
   validators: Array<[TextField, string, textFieldValidationFunction]> = []
 
-  constructor() { }
+  constructor() {}
 
   addValidator(
     field: TextField,

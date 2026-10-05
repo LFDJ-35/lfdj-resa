@@ -48,9 +48,8 @@ function logOut() {
 }
 
 // Par défaut, si aucune identité n'est présente, cette modale est ouverte.
-if(identity.value === null)
-{
-  openDialog(loginDialogRef.value);
+if (identity.value === null) {
+  openDialog(loginDialogRef.value)
 }
 </script>
 
@@ -70,10 +69,20 @@ if(identity.value === null)
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
     <form name="content" slot="content" method="dialog">
       <p>Qui êtes-vous ?</p>
-      <md-outlined-text-field required name="pseudo" label="Pseudo Discord" pattern=".+"
-        placeholder="Pseudo Discord"></md-outlined-text-field>
-      <md-outlined-text-field required name="prenom" label="Prénom" pattern=".+"
-        placeholder="Prénom"></md-outlined-text-field>
+      <md-outlined-text-field
+        required
+        name="pseudo"
+        label="Pseudo Discord"
+        pattern=".+"
+        placeholder="Pseudo Discord"
+      ></md-outlined-text-field>
+      <md-outlined-text-field
+        required
+        name="prenom"
+        label="Prénom"
+        pattern=".+"
+        placeholder="Prénom"
+      ></md-outlined-text-field>
     </form>
 
     <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->

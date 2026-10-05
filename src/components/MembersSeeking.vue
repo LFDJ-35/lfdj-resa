@@ -90,8 +90,13 @@ function addMemberToSeekingMembers(): void {
         </md-assist-chip>
       </md-chip-set>
     </div>
-    <div v-if="identityInMembersSeeking" class="add-element-box" :aria-label="LABEL_ADD_MEMBER_SEEKING_TABLE"
-      :title="LABEL_ADD_MEMBER_SEEKING_TABLE" @click="() => openDialog(addMemberSeekingDialogRef)">
+    <div
+      v-if="identityInMembersSeeking"
+      class="add-element-box"
+      :aria-label="LABEL_ADD_MEMBER_SEEKING_TABLE"
+      :title="LABEL_ADD_MEMBER_SEEKING_TABLE"
+      @click="() => openDialog(addMemberSeekingDialogRef)"
+    >
       <md-icon>add</md-icon>
       <p>Je cherche une table !</p>
     </div>
@@ -109,7 +114,12 @@ function addMemberToSeekingMembers(): void {
 
       <p>Type de jeu recherché</p>
       <md-chip-set name="jeux">
-        <md-filter-chip v-for="mapIt in ICON_MAP.entries()" :key="mapIt[0]" :label="mapIt[0]" :name="mapIt[0]">
+        <md-filter-chip
+          v-for="mapIt in ICON_MAP.entries()"
+          :key="mapIt[0]"
+          :label="mapIt[0]"
+          :name="mapIt[0]"
+        >
           <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
           <md-icon slot="icon">{{ mapIt[1] }}</md-icon>
         </md-filter-chip>

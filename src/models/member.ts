@@ -1,14 +1,14 @@
-import { identifier } from "@/models/identifier";
+import { identifier } from '@/models/identifier'
 
 class Member {
-  id: string;
-  pseudo: string;
-  name: string;
+  id: string
+  pseudo: string
+  name: string
 
   constructor(pseudo: string, name: string, id: string | undefined | null = undefined) {
-    this.id = identifier(id);
-    this.pseudo = pseudo;
-    this.name = name;
+    this.id = identifier(id)
+    this.pseudo = pseudo
+    this.name = name
   }
 
   toString(): string {
@@ -16,4 +16,4 @@ class Member {
   }
 }
 
-export { Member };
+export { Member }
