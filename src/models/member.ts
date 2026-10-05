@@ -1,4 +1,4 @@
-import { identifier } from "./identifier";
+import { identifier } from "@/models/identifier";
 
 class Member {
   id: string;

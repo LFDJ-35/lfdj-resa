@@ -1,6 +1,6 @@
-import { TableModel } from "./table_session";
-import type { Place } from "./place";
-import { SessionEvent } from "./event";
+import { TableModel } from "@/models/table_session";
+import type { Place } from "@/models/place";
+import { SessionEvent } from "@/models/event";
 
 class LFDJSessionModel extends SessionEvent {
 

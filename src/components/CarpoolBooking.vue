@@ -6,12 +6,12 @@ import { closeDialog, openDialog } from '@/utils/dialogs'
 import { MdChipSet, MdDialog, MdOutlinedTextField, MdRadio } from '@material/web/all'
 import { ref } from 'vue'
 
+import YesNoDialog from '@/components/dialogs/YesNoDialog.vue'
 import { FAKE_CARPOOLS } from '@/data/carpool_drivers'
 import { Carpool, type CarpoolWhen, type ICarpool } from '@/models/carpool'
 import { Member } from '@/models/member'
 import { identity, memberIsIdentity } from '@/stores/identity'
 import { FieldsValidator, findRecursiveNamedItem, MdRadioGroup } from '@/utils/forms'
-import YesNoDialog from './dialogs/YesNoDialog.vue'
 
 const location = 'VITRÉ'
 const LABEL_ADD_DRIVER = 'Proposer sa voiture'

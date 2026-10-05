@@ -1,5 +1,5 @@
-import { Member } from './member'
-import { identifier } from './identifier'
+import { Member } from '@/models/member'
+import { identifier } from '@/models/identifier'
 
 type CarpoolWhen = 'Après-midi' | 'Soirée'
 

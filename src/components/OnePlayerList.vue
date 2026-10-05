@@ -5,9 +5,9 @@ import '@material/web/icon/icon'
 import '@material/web/list/list'
 import '@material/web/list/list-item'
 
-import { Member } from '../models/member'
-import { type PropType } from 'vue'
+import { Member } from '@/models/member'
 import { memberIsIdentity } from '@/stores/identity'
+import { type PropType } from 'vue'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const emit = defineEmits<{

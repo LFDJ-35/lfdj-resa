@@ -1,5 +1,5 @@
-import { Member } from './member'
-import { SessionEvent } from './event'
+import { Member } from '@/models/member'
+import { SessionEvent } from '@/models/event'
 
 type TableType = "Jeu de rôle" | "Jeu de figurines" | "Jeu de cartes à collectionner" | "Jeu de plateau" | null
 

@@ -1,4 +1,4 @@
-import { identifier } from "./identifier";
+import { identifier } from "@/models/identifier";
 
 /**
  * Représente une session de jeu

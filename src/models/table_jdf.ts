@@ -1,5 +1,5 @@
-import { Member } from './member'
-import { TableModel } from './table_session'
+import { Member } from '@/models/member'
+import { TableModel } from '@/models/table_session'
 
 
 class JDFTableModel extends TableModel {
