@@ -13,8 +13,12 @@ function closeDialog(dialog: MdDialog | null) {
   dialog.close()
 }
 
-interface YesNoDialogRef {
+export interface YesNoDialogRef {
   thisDialog: MdDialog
 }
 
-export { openDialog, closeDialog, type YesNoDialogRef }
+export interface AddTableDialogRef {
+  thisDialog: MdDialog
+}
+
+export { openDialog, closeDialog }

@@ -54,6 +54,10 @@ class TableModel extends SessionEvent {
   canInsertPlayer(): boolean {
     return this.players.length < this.maxPlayers
   }
+
+  setTableType(tableType: GameType) {
+    this.type = tableType;
+  }
 }
 
 export { TableModel }
