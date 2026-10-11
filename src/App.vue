@@ -138,6 +138,7 @@ md-icon-button {
 .card-section {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   gap: 1em;
 }
 
