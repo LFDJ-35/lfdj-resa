@@ -4,6 +4,7 @@ import { JDFTableModel } from "@/models/tables/table_jdf";
 import { JDRTableModel } from "@/models/tables/table_jdr";
 import { FAKE_MEMBERS } from "./members";
 import { BAIS, VITRE } from "./places";
+import { JDPTableModel } from "@/models/tables/table_jdp";
 
 const DATE_1 = new Date(2026, 8, 9);
 const DATE_2 = new Date(2026, 9, 9);
@@ -27,6 +28,7 @@ const FAKE_SESSIONS: LFDJSessionModel[] = [
     new JDFTableModel("Battlefleet Gothic", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 4),
     new JCCTableModel("Pokémon", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 2),
     new JCCTableModel("One Piece", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 2),
+    new JDPTableModel("Root", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 4)
   ]),
   new LFDJSessionModel(DATE_2, BAIS, [
     new JDRTableModel("Cyberpunk RED", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 4),

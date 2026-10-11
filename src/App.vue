@@ -12,7 +12,9 @@ import AccountLogin from "@/components/AccountLogin.vue";
 import CarpoolBooking from "@/components/CarpoolBooking.vue";
 import FilterChips from "@/components/FilterChips.vue";
 import MembersSeeking from "@/components/MembersSeeking.vue";
+import JCCTablesViewer from "@/components/tables/jcc/JCCTablesViewer.vue";
 import JDFTablesViewer from "@/components/tables/jdf/JDFTablesViewer.vue";
+import JDPTablesViewer from "@/components/tables/jdp/JDPTablesViewer.vue";
 import JDRTablesViewer from '@/components/tables/jdr/JDRTablesViewer.vue';
 import { FAKE_SESSIONS } from "@/data/sessions.ts";
 import { formatDateDay } from "@/formatters/date.ts";
@@ -21,7 +23,6 @@ import type { LFDJSessionModel } from "@/models/session.ts";
 import { filterStore } from "@/stores/filters.ts";
 import { sessionStore } from "@/stores/session.ts";
 import { MdTabs } from "@material/web/tabs/tabs";
-import JCCTablesViewer from "./components/tables/jcc/JCCTablesViewer.vue";
 
 // Membres en quête de jeu
 const FILTER_ID_REC = "rec";
@@ -33,6 +34,9 @@ const FILTER_ID_JDR = "jdr";
 const FILTER_ID_JCC = "jcc";
 // Tables de JDF
 const FILTER_ID_JDF = "jdf";
+// Tables de JDP
+const FILTER_ID_JDP = "jdp";
+
 
 
 const FILTER_CHIPS: FilterChipModel[] = [
@@ -41,6 +45,7 @@ const FILTER_CHIPS: FilterChipModel[] = [
   { id: FILTER_ID_JDR, label: "Activer la vue Jeu de rôle", icon: "ifl", text: "Jeu de rôle" },
   { id: FILTER_ID_JCC, label: "Activer la vue Jeu de cartes à collectionner", icon: "playing_cards", text: "Jeu de cartes à collectionner" },
   { id: FILTER_ID_JDF, label: "Activer la vue Jeu de figurines", icon: "chess_pawn", text: "Jeu de figurines" },
+  { id: FILTER_ID_JDP, label: "Activer la vue Jeu de plateau", icon: "scoreboard", text: "Jeu de plateau" }
 ]
 
 const currentTabIndex = ref(0);
@@ -67,14 +72,20 @@ function switch_active_session(event: Event) {
           formatDateDay(session.from_date) }}
       </md-primary-tab>
     </md-tabs>
+    <p style="text-align: center;" v-if="FILTER_CHIPS.length === filterStore.hide.size"> Oups ! Plus rien à afficher.
+      Appuyez sur un bouton pour
+      afficher une vue.</p>
     <FilterChips id="filter-chips" :chips=FILTER_CHIPS></FilterChips>
     <md-divider></md-divider>
   </nav>
 
+
   <MembersSeeking v-if="!filterStore.hide.has(FILTER_ID_REC)" />
   <CarpoolBooking v-if="!filterStore.hide.has(FILTER_ID_COV)" />
-  <JDRTablesViewer v-if="!filterStore.hide.has(FILTER_ID_JDR)" />
+
   <JDFTablesViewer v-if="!filterStore.hide.has(FILTER_ID_JDF)" />
+  <JDRTablesViewer v-if="!filterStore.hide.has(FILTER_ID_JDR)" />
+  <JDPTablesViewer v-if="!filterStore.hide.has(FILTER_ID_JDP)" />
   <JCCTablesViewer v-if="!filterStore.hide.has(FILTER_ID_JCC)" />
 
   <AccountLogin />
