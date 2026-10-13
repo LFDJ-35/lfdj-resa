@@ -16,6 +16,7 @@ import { identity } from "@/stores/identity.ts";
 import { openDialog } from "@/utils/dialogs.ts";
 import { type YesNoDialogRef } from "@/utils/dialogs.ts";
 import { JDPTableModel } from "@/models/tables/table_jdp";
+import { ICON_MAP } from "@/models/games";
 
 const props = defineProps({
   tableData: { type: Object as PropType<JDPTableModel>, required: true }
@@ -57,6 +58,11 @@ function openRemovePlayerDialog(member: Member) {
     <h3>{{ table.title }}</h3>
 
     <md-chip-set>
+      <md-assist-chip aria-label="Jeu de plateau" title="Type de jeu">
+        <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
+        <md-icon slot="icon">{{ ICON_MAP.get("JDP") }}</md-icon>
+        <span>Jeu de plateau</span>
+      </md-assist-chip>
       <md-assist-chip aria-label="Auteur de la table" title="Auteur de la table">
         <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
         <md-icon slot="icon">person</md-icon>

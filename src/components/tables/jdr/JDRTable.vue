@@ -15,12 +15,13 @@ import OnePlayerList from "@/components/OnePlayerList.vue";
 import YesNoDialog from "@/components/dialogs/YesNoDialog.vue";
 import { identity } from "@/stores/identity.ts";
 import { openDialog, type YesNoDialogRef } from "@/utils/dialogs.ts";
+import { ICON_MAP } from "@/models/games";
 
 const props = defineProps({
-  table_data: { type: Object as PropType<JDRTableModel>, required: true }
+  tableData: { type: Object as PropType<JDRTableModel>, required: true }
 });
 
-const table = ref(props.table_data);
+const table = ref(props.tableData);
 
 const addSelfDialogRef = ref<YesNoDialogRef | null>(null);
 const removeMemberDialogRef = ref<YesNoDialogRef | null>(null);
@@ -54,8 +55,12 @@ defineEmits<{
 <template>
   <section class="table-view shadow">
     <h3>{{ table.title }}</h3>
-
     <md-chip-set>
+      <md-assist-chip aria-label="Jeu de rôle" title="Type de jeu">
+        <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
+        <md-icon slot="icon">{{ ICON_MAP.get("JDR") }}</md-icon>
+        <span>Jeu de rôle</span>
+      </md-assist-chip>
       <md-assist-chip aria-label="Maître du Jeu" title="Maître du Jeu">
         <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
         <md-icon slot="icon">person</md-icon>

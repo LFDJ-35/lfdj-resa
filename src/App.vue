@@ -12,10 +12,6 @@ import AccountLogin from "@/components/AccountLogin.vue";
 import CarpoolBooking from "@/components/CarpoolBooking.vue";
 import FilterChips from "@/components/FilterChips.vue";
 import MembersSeeking from "@/components/MembersSeeking.vue";
-import JCCTablesViewer from "@/components/tables/jcc/JCCTablesViewer.vue";
-import JDFTablesViewer from "@/components/tables/jdf/JDFTablesViewer.vue";
-import JDPTablesViewer from "@/components/tables/jdp/JDPTablesViewer.vue";
-import JDRTablesViewer from '@/components/tables/jdr/JDRTablesViewer.vue';
 import { FAKE_SESSIONS } from "@/data/sessions.ts";
 import { formatDateDay } from "@/formatters/date.ts";
 import type { FilterChipModel } from "@/models/filter_chip.ts";
@@ -23,29 +19,31 @@ import type { LFDJSessionModel } from "@/models/session.ts";
 import { filterStore } from "@/stores/filters.ts";
 import { sessionStore } from "@/stores/session.ts";
 import { MdTabs } from "@material/web/tabs/tabs";
+import TablesViewerByTime from "@/components/tables/TablesViewerByTime.vue";
+import { ICON_MAP } from "@/models/games.ts";
 
 // Membres en quête de jeu
 const FILTER_ID_REC = "rec";
 // Membres en quête de covoiturage
 const FILTER_ID_COV = "cov";
 // Tables de JDR
-const FILTER_ID_JDR = "jdr";
+const FILTER_ID_JDR = "JDR";
 // Tables de JCC
-const FILTER_ID_JCC = "jcc";
+const FILTER_ID_JCC = "JCC";
 // Tables de JDF
-const FILTER_ID_JDF = "jdf";
+const FILTER_ID_JDF = "JDF";
 // Tables de JDP
-const FILTER_ID_JDP = "jdp";
+const FILTER_ID_JDP = "JDP";
 
 
 
 const FILTER_CHIPS: FilterChipModel[] = [
   { id: FILTER_ID_REC, label: "Activer la vue Membres en recherche de jeux", icon: "person_alert", text: "Membres en recherche de jeu" },
   { id: FILTER_ID_COV, label: "Activer la vue covoiturage", icon: "local_taxi", text: "Covoiturage" },
-  { id: FILTER_ID_JDR, label: "Activer la vue Jeu de rôle", icon: "ifl", text: "Jeu de rôle" },
-  { id: FILTER_ID_JCC, label: "Activer la vue Jeu de cartes à collectionner", icon: "playing_cards", text: "Jeu de cartes à collectionner" },
-  { id: FILTER_ID_JDF, label: "Activer la vue Jeu de figurines", icon: "chess_pawn", text: "Jeu de figurines" },
-  { id: FILTER_ID_JDP, label: "Activer la vue Jeu de plateau", icon: "scoreboard", text: "Jeu de plateau" }
+  { id: FILTER_ID_JDR, label: "Activer la vue Jeu de rôle", icon: ICON_MAP.get("JDR") ?? "", text: "Jeu de rôle" },
+  { id: FILTER_ID_JCC, label: "Activer la vue Jeu de cartes à collectionner", icon: ICON_MAP.get("JCC") ?? "", text: "Jeu de cartes à collectionner" },
+  { id: FILTER_ID_JDF, label: "Activer la vue Jeu de figurines", icon: ICON_MAP.get("JDF") ?? "", text: "Jeu de figurines" },
+  { id: FILTER_ID_JDP, label: "Activer la vue Jeu de plateau", icon: ICON_MAP.get("JDP") ?? "", text: "Jeu de plateau" }
 ]
 
 const currentTabIndex = ref(0);
@@ -83,10 +81,18 @@ function switch_active_session(event: Event) {
   <MembersSeeking v-if="!filterStore.hide.has(FILTER_ID_REC)" />
   <CarpoolBooking v-if="!filterStore.hide.has(FILTER_ID_COV)" />
 
-  <JDFTablesViewer v-if="!filterStore.hide.has(FILTER_ID_JDF)" />
-  <JDRTablesViewer v-if="!filterStore.hide.has(FILTER_ID_JDR)" />
-  <JDPTablesViewer v-if="!filterStore.hide.has(FILTER_ID_JDP)" />
-  <JCCTablesViewer v-if="!filterStore.hide.has(FILTER_ID_JCC)" />
+
+  <h2>
+    <md-icon>sunny</md-icon> Tables l'après-midi
+  </h2>
+  <section class="card-section">
+    <TablesViewerByTime when="après-midi"></TablesViewerByTime>
+  </section>
+
+  <h2> <md-icon>nightlight</md-icon> Tables du soir </h2>
+  <section class="card-section">
+    <TablesViewerByTime when="soirée"></TablesViewerByTime>
+  </section>
 
   <AccountLogin />
 </template>
@@ -183,6 +189,15 @@ h2 {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     justify-content: start;
+  }
+}
+
+/* Sur un affichage mobile (petit)*/
+@media (max-width: 420px) {
+  .card-section {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    justify-items: center;
   }
 }
 </style>

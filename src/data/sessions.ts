@@ -9,8 +9,11 @@ import { JDPTableModel } from "@/models/tables/table_jdp";
 const DATE_1 = new Date(2026, 8, 9);
 const DATE_2 = new Date(2026, 9, 9);
 
-const BEGIN_DATE = new Date();
-BEGIN_DATE.setHours(14, 0);
+const DATE_AFTERNOON = new Date();
+DATE_AFTERNOON.setHours(14, 0);
+
+const DATE_EVENING = new Date();
+DATE_EVENING.setHours(20, 30)
 
 const END_DATE = new Date();
 END_DATE.setHours(1, 0);
@@ -22,26 +25,26 @@ Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deseru
 
 const FAKE_SESSIONS: LFDJSessionModel[] = [
   new LFDJSessionModel(DATE_1, VITRE, [
-    new JDRTableModel("Alien", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 4),
-    new JDRTableModel("7ème Mer", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[1]!, [FAKE_MEMBERS[3]!], 4),
-    new JDFTableModel("Warhammer 40K", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 4),
-    new JDFTableModel("Battlefleet Gothic", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 4),
-    new JCCTableModel("Pokémon", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 2),
-    new JCCTableModel("One Piece", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 2),
-    new JDPTableModel("Root", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 4)
+    new JDRTableModel("Alien", DATE_AFTERNOON, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 4),
+    new JDRTableModel("7ème Mer", DATE_EVENING, END_DATE, LOREM, FAKE_MEMBERS[1]!, [FAKE_MEMBERS[3]!], 4),
+    new JDFTableModel("Warhammer 40K", DATE_EVENING, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 4),
+    new JDFTableModel("Battlefleet Gothic", DATE_AFTERNOON, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 4),
+    new JCCTableModel("Pokémon", DATE_EVENING, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 2),
+    new JCCTableModel("One Piece", DATE_EVENING, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 2),
+    new JDPTableModel("Root", DATE_AFTERNOON, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 4)
   ]),
   new LFDJSessionModel(DATE_2, BAIS, [
-    new JDRTableModel("Cyberpunk RED", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 4),
-    new JDRTableModel("Cats ! La Mascarade", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[1]!, [FAKE_MEMBERS[3]!], 4),
-    new JDFTableModel("BloodBowl - Ligue 2", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 2),
-    new JCCTableModel("Magic", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 4),
-    new JCCTableModel("Yu-Gi-Oh !", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 4),
+    new JDRTableModel("Cyberpunk RED", DATE_AFTERNOON, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 4),
+    new JDRTableModel("Cats ! La Mascarade", DATE_EVENING, END_DATE, LOREM, FAKE_MEMBERS[1]!, [FAKE_MEMBERS[3]!], 4),
+    new JDFTableModel("BloodBowl - Ligue 2", DATE_AFTERNOON, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 2),
+    new JCCTableModel("Magic", DATE_EVENING, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 4),
+    new JCCTableModel("Yu-Gi-Oh !", DATE_AFTERNOON, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 4),
 
   ]),
   new LFDJSessionModel(DATE_2, BAIS, [
-    new JDRTableModel("Tout le monde est John", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[3]!], 4),
-    new JDRTableModel("Agone", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[1]!, [FAKE_MEMBERS[2]!], 4),
-    new JDFTableModel("BloodBowl - Ligue 2", BEGIN_DATE, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 2),
+    new JDRTableModel("Tout le monde est John", DATE_AFTERNOON, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[3]!], 4),
+    new JDRTableModel("Agone", DATE_EVENING, END_DATE, LOREM, FAKE_MEMBERS[1]!, [FAKE_MEMBERS[2]!], 4),
+    new JDFTableModel("BloodBowl - Ligue 2", DATE_AFTERNOON, END_DATE, LOREM, FAKE_MEMBERS[0]!, [FAKE_MEMBERS[2]!], 2),
   ]),
 ]
 

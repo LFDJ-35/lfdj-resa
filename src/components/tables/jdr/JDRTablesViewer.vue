@@ -27,7 +27,7 @@ function addTable(tableData: TableModel) {
 <template>
   <h2>Tables de jeu de rôle du {{ formatDateDay(sessionStore.current.from_date) }}</h2>
   <article class="card-section">
-    <JDRTable v-for="table in jdrTables" :key="table.title" :table_data="table"
+    <JDRTable v-for="table in jdrTables" :key="table.title" :tableData="table"
       @remove="sessionStore.current.removeTable(table)" />
     <div v-if="identified" class="add-element-box" @click="() => openDialog(dialogRef?.thisDialog)">
       <md-icon>add</md-icon>
