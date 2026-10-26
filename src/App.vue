@@ -6,7 +6,7 @@ import "@material/web/icon/icon";
 import "@material/web/tabs/primary-tab";
 import "@material/web/tabs/tabs";
 
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 import AccountLogin from "@/components/AccountLogin.vue";
 import CarpoolBooking from "@/components/CarpoolBooking.vue";
@@ -16,37 +16,24 @@ import { FAKE_SESSIONS } from "@/data/sessions.ts";
 import { formatDateDay } from "@/formatters/date.ts";
 import type { FilterChipModel } from "@/models/filter_chip.ts";
 import type { LFDJSessionModel } from "@/models/session.ts";
-import { filterStore } from "@/stores/filters.ts";
+import { FILTER_ID_COV, FILTER_ID_JCC, FILTER_ID_JDF, FILTER_ID_JDP, FILTER_ID_JDR, FILTER_ID_REC, filterStore } from "@/stores/filters.ts";
 import { sessionStore } from "@/stores/session.ts";
 import { MdTabs } from "@material/web/tabs/tabs";
 import TablesViewerByTime from "@/components/tables/TablesViewerByTime.vue";
 import { ICON_MAP } from "@/models/games.ts";
 
-// Membres en quête de jeu
-const FILTER_ID_REC = "rec";
-// Membres en quête de covoiturage
-const FILTER_ID_COV = "cov";
-// Tables de JDR
-const FILTER_ID_JDR = "JDR";
-// Tables de JCC
-const FILTER_ID_JCC = "JCC";
-// Tables de JDF
-const FILTER_ID_JDF = "JDF";
-// Tables de JDP
-const FILTER_ID_JDP = "JDP";
-
-
 
 const FILTER_CHIPS: FilterChipModel[] = [
   { id: FILTER_ID_REC, label: "Activer la vue Membres en recherche de jeux", icon: "person_alert", text: "Membres en recherche de jeu" },
   { id: FILTER_ID_COV, label: "Activer la vue covoiturage", icon: "local_taxi", text: "Covoiturage" },
-  { id: FILTER_ID_JDR, label: "Activer la vue Jeu de rôle", icon: ICON_MAP.get("JDR") ?? "", text: "Jeu de rôle" },
-  { id: FILTER_ID_JCC, label: "Activer la vue Jeu de cartes à collectionner", icon: ICON_MAP.get("JCC") ?? "", text: "Jeu de cartes à collectionner" },
-  { id: FILTER_ID_JDF, label: "Activer la vue Jeu de figurines", icon: ICON_MAP.get("JDF") ?? "", text: "Jeu de figurines" },
-  { id: FILTER_ID_JDP, label: "Activer la vue Jeu de plateau", icon: ICON_MAP.get("JDP") ?? "", text: "Jeu de plateau" }
+  { id: FILTER_ID_JDR, label: "Activer la vue Jeu de rôle", icon: ICON_MAP.get(FILTER_ID_JDR) ?? "", text: "Jeu de rôle" },
+  { id: FILTER_ID_JCC, label: "Activer la vue Jeu de cartes à collectionner", icon: ICON_MAP.get(FILTER_ID_JCC) ?? "", text: "Jeu de cartes à collectionner" },
+  { id: FILTER_ID_JDF, label: "Activer la vue Jeu de figurines", icon: ICON_MAP.get(FILTER_ID_JDF) ?? "", text: "Jeu de figurines" },
+  { id: FILTER_ID_JDP, label: "Activer la vue Jeu de plateau", icon: ICON_MAP.get(FILTER_ID_JDP) ?? "", text: "Jeu de plateau" }
 ]
 
 const currentTabIndex = ref(0);
+const everythingIsFiltered = computed(() => FILTER_CHIPS.length === filterStore.hide.size)
 
 function switch_active_session(event: Event) {
 
@@ -70,7 +57,7 @@ function switch_active_session(event: Event) {
           formatDateDay(session.from_date) }}
       </md-primary-tab>
     </md-tabs>
-    <p style="text-align: center;" v-if="FILTER_CHIPS.length === filterStore.hide.size"> Oups ! Plus rien à afficher.
+    <p style="text-align: center;" v-if="everythingIsFiltered"> Oups ! Plus rien à afficher.
       Appuyez sur un bouton pour
       afficher une vue.</p>
     <FilterChips id="filter-chips" :chips=FILTER_CHIPS></FilterChips>
@@ -81,18 +68,20 @@ function switch_active_session(event: Event) {
   <MembersSeeking v-if="!filterStore.hide.has(FILTER_ID_REC)" />
   <CarpoolBooking v-if="!filterStore.hide.has(FILTER_ID_COV)" />
 
+  <template v-if="!everythingIsFiltered">
+    <h2>
+      <md-icon>sunny</md-icon> Tables l'après-midi
+    </h2>
+    <section class="card-section">
+      <TablesViewerByTime when="après-midi"></TablesViewerByTime>
+    </section>
 
-  <h2>
-    <md-icon>sunny</md-icon> Tables l'après-midi
-  </h2>
-  <section class="card-section">
-    <TablesViewerByTime when="après-midi"></TablesViewerByTime>
-  </section>
-
-  <h2> <md-icon>nightlight</md-icon> Tables du soir </h2>
-  <section class="card-section">
-    <TablesViewerByTime when="soirée"></TablesViewerByTime>
-  </section>
+    <h2> <md-icon>nightlight</md-icon> Tables du soir </h2>
+    <section class="card-section">
+      <TablesViewerByTime when="soirée"></TablesViewerByTime>
+    </section>
+  </template>
+  <h2 v-else>Rien à afficher.</h2>
 
   <AccountLogin />
 </template>
@@ -194,6 +183,11 @@ h2 {
 
 /* Sur un affichage mobile (petit)*/
 @media (max-width: 420px) {
+
+  .add-element-box {
+    width: 100%;
+  }
+
   .card-section {
     display: grid;
     grid-template-columns: repeat(1, 1fr);

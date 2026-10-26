@@ -15,8 +15,6 @@ const props = defineProps({
 const FILTER_CHIPS: FilterChipModel[] = props.chips;
 
 function updateFilters(e: Event) {
-  console.log(e.target as MdFilterChip);
-
   const filterChip = e.target as MdFilterChip;
   const filterID = filterChip.attributes.getNamedItem("data-id")?.value;
 

@@ -9,6 +9,7 @@ import { closeDialog, openDialog } from '@/utils/dialogs'
 import { findRecursiveNamedItem } from '@/utils/forms'
 import { MdChipSet, MdDialog, MdFilterChip } from '@material/web/all'
 import { computed, ref, type ComputedRef } from 'vue'
+import { ICON_MAP } from '@/models/games'
 
 type GameType = 'JDF' | 'JCC' | 'JDP' | 'JDR'
 
@@ -24,13 +25,6 @@ const MEMBERS_SEEKING = ref([
   { member: FAKE_MEMBERS[1]!, seeking: new Set(['JDF', 'JDR', 'JDP']) },
   { member: FAKE_MEMBERS[2]!, seeking: new Set(['JDF', 'JDR', 'JDP']) },
   { member: FAKE_MEMBERS[0]!, seeking: new Set(['JDF', 'JDR', 'JDP']) },
-])
-
-const ICON_MAP: Map<GameType, string> = new Map([
-  ['JDF', 'swords'],
-  ['JCC', 'playing_cards'],
-  ['JDR', 'casino'],
-  ['JDP', 'chess'],
 ])
 
 const LABEL_ADD_MEMBER_SEEKING_TABLE = "S'inscrire en tant que membre recherchant une table"

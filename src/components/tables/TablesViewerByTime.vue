@@ -15,10 +15,13 @@ const props = defineProps<{
   when: ("après-midi" | "soirée")
 }>()
 
+const tablesByType = computed(() => {
+  return sessionStore.current.tables.filter((table) => !filterStore.hide.has(table.type))
+})
 
 const tablesByTime = computed(() => {
   const timeFilter = props.when === "après-midi" ? 14 : 20;
-  return sessionStore.current.tables.filter((tables) => tables.from_date.getHours() === timeFilter)
+  return tablesByType.value.filter((tables) => tables.from_date.getHours() === timeFilter)
 })
 
 
@@ -43,18 +46,10 @@ const jccTables = computed(() => {
 
 <template>
 
-  <template v-if="!filterStore.hide.has('JDR')">
-    <JDFTable v-for="table in jdfTables" :key="table.id" :table-data="table"></JDFTable>
-  </template>
-  <template v-if="!filterStore.hide.has('JDF')">
-    <JDRTable v-for="table in jdrTables" :key="table.id" :table-data="table"></JDRTable>
-  </template>
-  <template v-if="!filterStore.hide.has('JCC')">
-    <JCCTable v-for="table in jccTables" :key="table.id" :table-data="table"></JCCTable>
-  </template>
-  <template v-if="!filterStore.hide.has('JDP')">
-    <JDPTable v-for="table in jdpTables" :key="table.id" :table-data="table"></JDPTable>
-  </template>
+  <JDFTable v-for="table in jdfTables" :key="table.id" :table-data="table"></JDFTable>
+  <JDRTable v-for="table in jdrTables" :key="table.id" :table-data="table"></JDRTable>
+  <JCCTable v-for="table in jccTables" :key="table.id" :table-data="table"></JCCTable>
+  <JDPTable v-for="table in jdpTables" :key="table.id" :table-data="table"></JDPTable>
 
   <div v-if="identified" class="add-element-box" @click="() => { }">
     <md-icon>add</md-icon>
